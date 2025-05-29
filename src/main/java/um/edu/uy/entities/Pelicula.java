@@ -5,7 +5,8 @@ public class Pelicula {
     private String titulo_pelicula;
     private String idiomaOriginal;
     private int ingresos;
-    //definir generos, coleccion, lista de participantes(elenco), director
+    //definir generos, coleccion, lista de participantes(elenco),
+    private Participante director;
 
 
     public Pelicula(String id_pelicula, String titulo_pelicula, String idiomaOriginal, int ingresos) {
