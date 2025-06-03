@@ -1,4 +1,4 @@
-package um.edu.uy;
+package um.edu.uy.tads;
 
 public class Main {
     public static void main(String[] args) {
