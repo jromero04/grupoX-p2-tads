@@ -1,8 +1,8 @@
 package um.edu.uy.tads.BinarySearchTree;
 
-import um.edu.uy.List.MyList;
-import um.edu.uy.queue.EmptyQueueException;
-import um.edu.uy.stack.EmptyStackException;
+import um.edu.uy.tads.List.MyList;
+import um.edu.uy.tads.queue.EmptyQueueException;
+import um.edu.uy.tads.stack.EmptyStackException;
 
 
 public interface MyTree<K, T> {

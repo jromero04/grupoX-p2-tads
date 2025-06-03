@@ -1,7 +1,7 @@
 package um.edu.uy.tads.queue;
 
 
-import um.edu.uy.List.Node;
+import um.edu.uy.tads.List.Node;
 
 public class Queue<T> implements MyQueue<T> {
     Node<T> base;

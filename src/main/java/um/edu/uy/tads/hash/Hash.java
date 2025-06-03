@@ -159,7 +159,7 @@ public class Hash<K, T> implements MyHash<K, T> {
         return array;
     }
 
-    public void relace(K key, T value) throws InvalidHashKey {
+    public void replace(K key, T value) throws InvalidHashKey {
         int index = findSlotForKey(key);
         if (array[index] == null) {
             throw new InvalidHashKey();

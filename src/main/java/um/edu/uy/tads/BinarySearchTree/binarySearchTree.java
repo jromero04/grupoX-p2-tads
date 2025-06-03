@@ -1,12 +1,12 @@
 package um.edu.uy.tads.BinarySearchTree;
 
 
-import um.edu.uy.List.MyLinkedList;
-import um.edu.uy.List.MyList;
-import um.edu.uy.queue.EmptyQueueException;
-import um.edu.uy.queue.Queue;
-import um.edu.uy.stack.EmptyStackException;
-import um.edu.uy.stack.Stack;
+import um.edu.uy.tads.List.MyLinkedList;
+import um.edu.uy.tads.List.MyList;
+import um.edu.uy.tads.queue.EmptyQueueException;
+import um.edu.uy.tads.queue.Queue;
+import um.edu.uy.tads.stack.EmptyStackException;
+import um.edu.uy.tads.stack.Stack;
 
 public class binarySearchTree<K extends Comparable<K>, T> implements MyTree<K, T> {
     private Node<K, T> root;

@@ -17,6 +17,7 @@ public class Node<K, T> {
         return key;
     }
 
+    // comparamos por clace
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

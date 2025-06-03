@@ -1,7 +1,7 @@
 package um.edu.uy.tads.stack;
 
 
-import um.edu.uy.List.Node;
+import um.edu.uy.tads.List.Node;
 
 public class Stack<T> implements MyStack<T> {
     Node<T> base;
