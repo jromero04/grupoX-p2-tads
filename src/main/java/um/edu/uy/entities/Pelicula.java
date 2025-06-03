@@ -1,15 +1,20 @@
 package um.edu.uy.entities;
 
+import um.edu.uy.tads.List.MyLinkedList;
+import um.edu.uy.tads.List.MyList;
+
 public class Pelicula {
     private String id_pelicula;
     private String titulo_pelicula;
     private String idiomaOriginal;
-    private int ingresos;
-    //definir generos, coleccion, lista de participantes(elenco),
+    private double ingresos;
+    private MyList<String> generos = new MyLinkedList<>();
     private Participante director;
+    private Coleccion coleccion;
+    private MyList<Participante> elenco = new MyLinkedList<>();
+    // no se si no hace falta agregar una lista de calificaciones
 
-
-    public Pelicula(String id_pelicula, String titulo_pelicula, String idiomaOriginal, int ingresos) {
+    public Pelicula(String id_pelicula, String titulo_pelicula, String idiomaOriginal, double ingresos) {
         this.id_pelicula = id_pelicula;
         this.titulo_pelicula = titulo_pelicula;
         this.idiomaOriginal = idiomaOriginal;
@@ -20,33 +25,56 @@ public class Pelicula {
         return id_pelicula;
     }
 
-    public void setId_pelicula(String id_pelicula) {
-        this.id_pelicula = id_pelicula;
-    }
-
     public String getTitulo_pelicula() {
         return titulo_pelicula;
-    }
-
-    public void setTitulo_pelicula(String titulo_pelicula) {
-        this.titulo_pelicula = titulo_pelicula;
     }
 
     public String getIdiomaOriginal() {
         return idiomaOriginal;
     }
 
-    public void setIdiomaOriginal(String idiomaOriginal) {
-        this.idiomaOriginal = idiomaOriginal;
-    }
-
-    public int getIngresos() {
+    public double getIngresos() {
         return ingresos;
     }
 
-    public void setIngresos(int ingresos) {
+    public void setIngresos(double ingresos) {
         this.ingresos = ingresos;
     }
 
-    // agregar un compare por id despues
+    public MyList<String> getGeneros() {
+        return generos;
+    }
+
+    public void agregarGenero(String genero) {
+        this.generos.add(genero);
+    }
+
+    public Participante getDirector() {
+        return director;
+    }
+
+    public void setDirector(Participante director) {
+        this.director = director;
+    }
+
+    public Coleccion getColeccion() {
+        return coleccion;
+    }
+
+    public void setColeccion(Coleccion coleccion) {
+        this.coleccion = coleccion;
+    }
+
+    public MyList<Participante> getElenco() {
+        return elenco;
+    }
+
+    public void agregarParticipante(Participante p) {
+        this.elenco.add(p);
+    }
+
+    @Override
+    public String toString() {
+        return id_pelicula + ", " + titulo_pelicula + ", " + idiomaOriginal;
+    }
 }
