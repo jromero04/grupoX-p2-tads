@@ -12,6 +12,7 @@ public class Pelicula {
     private Participante director;
     private Coleccion coleccion;
     private MyList<Participante> elenco = new MyLinkedList<>();
+    private MyList<Calificacion> calificaciones = new MyLinkedList<>();
     // no se si no hace falta agregar una lista de calificaciones
 
     public Pelicula(String id_pelicula, String titulo_pelicula, String idiomaOriginal, double ingresos) {
@@ -71,6 +72,14 @@ public class Pelicula {
 
     public void agregarParticipante(Participante p) {
         this.elenco.add(p);
+    }
+
+    public void agregarCalificacion(Calificacion c) {
+        this.calificaciones.add(c);
+    }
+
+    public MyList<Calificacion> getCalificaciones() {
+        return calificaciones;
     }
 
     @Override
