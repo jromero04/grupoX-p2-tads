@@ -1,14 +1,20 @@
 package um.edu.uy.entities;
 
 public class Calificacion {
+    private String idUsuario;
     private String idPelicula;
     private double puntaje;
-    private String fecha; // puede ser en formato "YYYY-MM-DD"
+    private String fecha; // ver que formato
 
-    public Calificacion(String idPelicula, double puntaje, String fecha) {
+    public Calificacion(String idUsuario, String idPelicula, double puntaje, String fecha) {
+        this.idUsuario = idUsuario;
         this.idPelicula = idPelicula;
         this.puntaje = puntaje;
         this.fecha = fecha;
+    }
+
+    public String getIdUsuario() {
+        return idUsuario;
     }
 
     public String getIdPelicula() {
