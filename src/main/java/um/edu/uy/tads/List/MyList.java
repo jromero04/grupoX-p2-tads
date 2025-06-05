@@ -16,4 +16,6 @@ public interface MyList<T> {
     void printList();
 
     int size();
+
+    void add(int index, T value);
 }

@@ -28,6 +28,7 @@ public class UMovieService2 {
                     System.out.println(p.getTitulo_pelicula());
                 }
             }
+
         }
     }
 
@@ -41,6 +42,9 @@ public class UMovieService2 {
                     // swap
                     lista.remove(j + 1);
                     lista.remove(j);
+                    lista.add(j, p2);
+                    lista.add(j + 1, p1);
+
                 }
             }
         }
