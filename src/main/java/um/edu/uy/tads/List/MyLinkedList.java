@@ -199,4 +199,35 @@ public class MyLinkedList<T> implements MyList<T> {
         }
         size++;
     }
+
+    public void add(int index, T value) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        Node<T> newNode = new Node<>(value);
+
+        if (index == 0) {
+            newNode.setNext(head);
+            head = newNode;
+            if (size == 0) {
+                last = newNode;
+            }
+        } else {
+            Node<T> current = head;
+            for (int i = 0; i < index - 1; i++) {
+                current = current.getNext();
+            }
+
+            newNode.setNext(current.getNext());
+            current.setNext(newNode);
+
+            if (newNode.getNext() == null) {
+                last = newNode;
+            }
+        }
+
+        size++;
+    }
+
 }
