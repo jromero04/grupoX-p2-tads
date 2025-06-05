@@ -155,6 +155,7 @@ public class Hash<K, T> implements MyHash<K, T> {
         }
     }
 
+    @Override
     public Node<K, T>[] getArray() {
         return array;
     }

@@ -20,5 +20,7 @@ public interface MyHash<K,T> {
 
     void printHash();
 
+    Node<K, T>[] getArray();
+
 
 }

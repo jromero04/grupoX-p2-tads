@@ -82,6 +82,10 @@ public class Pelicula {
         return calificaciones;
     }
 
+    public int getCantidadDeCalificaciones(){
+        return this.calificaciones.size();
+    }
+
     @Override
     public String toString() {
         return id_pelicula + ", " + titulo_pelicula + ", " + idiomaOriginal;
