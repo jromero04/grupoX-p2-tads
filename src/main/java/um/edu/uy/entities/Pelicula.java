@@ -3,7 +3,7 @@ package um.edu.uy.entities;
 import um.edu.uy.tads.List.MyLinkedList;
 import um.edu.uy.tads.List.MyList;
 
-public class Pelicula {
+public class Pelicula implements Comparable<Pelicula>{
     private String id_pelicula;
     private String titulo_pelicula;
     private String idiomaOriginal;
@@ -89,5 +89,10 @@ public class Pelicula {
     @Override
     public String toString() {
         return id_pelicula + ", " + titulo_pelicula + ", " + idiomaOriginal;
+    }
+
+    @Override
+    public int compareTo(Pelicula otra) {
+        return Integer.compare(this.getCantidadDeCalificaciones(), otra.getCantidadDeCalificaciones());
     }
 }

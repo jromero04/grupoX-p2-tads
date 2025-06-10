@@ -26,8 +26,7 @@ public class ArrayHeap<T extends Comparable<T>> implements ArrayHeap_interface<T
     @Override
     public void insert(T elemento) {
         if (size + 1 >= heap.length){
-            System.out.println("Heap lleno. No se puede insertar mas");
-            return;
+            resize();
         }
         size++;
         heap[size] = elemento;
@@ -95,5 +94,14 @@ public class ArrayHeap<T extends Comparable<T>> implements ArrayHeap_interface<T
             return null;
         }
         return heap[1];
+    }
+
+    private void resize() {
+        int nuevaCapacidad = heap.length * 2;
+        T[] nuevoHeap = (T[]) new Comparable[nuevaCapacidad];
+        for (int i = 1; i <= size; i++) {
+            nuevoHeap[i] = heap[i];
+        }
+        heap = nuevoHeap;
     }
 }

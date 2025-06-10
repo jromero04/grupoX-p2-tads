@@ -219,7 +219,6 @@ public class MyLinkedList<T> implements MyList<T> {
             for (int i = 0; i < index - 1; i++) {
                 current = current.getNext();
             }
-
             newNode.setNext(current.getNext());
             current.setNext(newNode);
 
