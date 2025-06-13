@@ -25,10 +25,10 @@ public class Hash<K, T> implements MyHash<K, T> {
 
     @Override
     public int hashFunction(K key) {
-        int hash = 7;
+        int hash = 5381;
         String keyStr = key.toString();
         for (int i = 0; i < keyStr.length(); i++) {
-            hash = hash * 31 + keyStr.charAt(i);
+            hash = ((hash << 5) + hash) + keyStr.charAt(i); // hash * 33 + c
         }
         return Math.abs(hash % size);
     }
@@ -42,7 +42,10 @@ public class Hash<K, T> implements MyHash<K, T> {
         if (array[index] == null) {
             array[index] = new Node<>(key, value);
             counter++;
+        } else {
+            array[index] = new Node<>(key, value); // reemplaza valor si ya existe la key
         }
+
     }
 
     @Override
@@ -146,6 +149,7 @@ public class Hash<K, T> implements MyHash<K, T> {
         }
     }
 
+    @Override
     public boolean contains(K key) {
         try {
             int index = findSlotForKey(key);
@@ -167,4 +171,6 @@ public class Hash<K, T> implements MyHash<K, T> {
         }
         array[index] = new Node<>(key, value);
     }
+
+
 }

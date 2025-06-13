@@ -1,7 +1,8 @@
 package um.edu.uy.entities;
 
-import um.edu.uy.tads.List.MyLinkedList;
 import um.edu.uy.tads.List.MyList;
+import um.edu.uy.tads.hash.Hash;
+import um.edu.uy.tads.hash.MyHash;
 
 import java.util.Objects;
 
@@ -11,14 +12,14 @@ public class Participante {
     lista de crew donde voy a encontrar la director y al final el id de la pelicula.
     */
     private String rol;
-    private MyList<String> peliculas;
+    private MyHash<String, Boolean> peliculas;
 
     // ver si no agregar fecha por mes del anio para consultas
 
     public Participante(String nombre_participante, String rol) {
         this.nombre_participante = nombre_participante;
         this.rol = rol;
-        this.peliculas = new MyLinkedList<>();
+        this.peliculas = new Hash<>(100);
     }
 
     public String getNombre_participante() {
@@ -37,24 +38,15 @@ public class Participante {
         this.rol = rol;
     }
 
-    public MyList<String> getPeliculas() {
+    public MyHash<String, Boolean> getPeliculas() {
         return peliculas;
     }
 
     // evito que se agreguen mas de una vez el idPelicula
     // que pasa si un participante aparece como director y actor en una misma pelicula??
-    public void agregarPelicula(String idPelicula){
-        boolean yaRegistrada = false;
-        for (int i = 0; i<peliculas.size(); i++){
-            if (peliculas.get(i).equals(idPelicula)){
-                yaRegistrada = true;
-                break;
-            }
-        }
-        if (!yaRegistrada){
-            this.peliculas.add(idPelicula);
-        }else {
-            System.out.println("La pelicula con id: " + idPelicula + " ya esta registrada en las participaciones");
+    public void agregarPelicula(String idPelicula) {
+        if (!peliculas.contains(idPelicula)) {
+            peliculas.add(idPelicula, true);
         }
     }
 

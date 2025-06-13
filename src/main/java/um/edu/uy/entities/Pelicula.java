@@ -2,6 +2,8 @@ package um.edu.uy.entities;
 
 import um.edu.uy.tads.List.MyLinkedList;
 import um.edu.uy.tads.List.MyList;
+import um.edu.uy.tads.hash.Hash;
+import um.edu.uy.tads.hash.MyHash;
 
 public class Pelicula implements Comparable<Pelicula>{
     private String id_pelicula;
@@ -11,9 +13,8 @@ public class Pelicula implements Comparable<Pelicula>{
     private MyList<String> generos = new MyLinkedList<>();
     private Participante director;
     private Coleccion coleccion;
-    private MyList<Participante> elenco = new MyLinkedList<>();
+    private MyHash<String,Participante> elenco = new Hash<>(100);
     private MyList<Calificacion> calificaciones = new MyLinkedList<>();
-    // no se si no hace falta agregar una lista de calificaciones
 
     public Pelicula(String id_pelicula, String titulo_pelicula, String idiomaOriginal, double ingresos) {
         this.id_pelicula = id_pelicula;
@@ -66,12 +67,15 @@ public class Pelicula implements Comparable<Pelicula>{
         this.coleccion = coleccion;
     }
 
-    public MyList<Participante> getElenco() {
+    public MyHash<String, Participante> getElenco() {
         return elenco;
     }
 
     public void agregarParticipante(Participante p) {
-        this.elenco.add(p);
+        String clave = p.getNombre_participante() + "-" + p.getRol();
+        if (!elenco.contains(clave)) {
+            elenco.add(clave, p);
+        }
     }
 
     public void agregarCalificacion(Calificacion c) {

@@ -9,28 +9,25 @@ import um.edu.uy.tads.hash.Node;
 import um.edu.uy.tads.heap.ArrayHeap;
 
 public class UMovieService {
-    private MyHash<String, Pelicula> peliculas;
-    private MyHash<String, Usuario> usuarios;
-    private MyHash<String, Participante> participantes;
-    private MyHash<String, Coleccion> colecciones;
+    private MyHash<String, Pelicula> peliculas  = new Hash<>(100);
+    private MyHash<String, Usuario> usuarios = new Hash<>(100);
+    private MyHash<String, Participante> participantes = new Hash<>(100);
+    private MyHash<String, Coleccion> colecciones = new Hash<>(100);
 
-    private MyList<Calificacion> calificaciones;
+    private MyList<Calificacion> calificaciones = new MyLinkedList<>();
 
-
-    public UMovieService(){
-        this.peliculas = new Hash<>(100);
-        this.usuarios = new Hash<>(100);
-        this.participantes = new Hash<>(100);
-        this.colecciones = new Hash<>(100);
-        this.calificaciones = new MyLinkedList<>();
-
-    }
 
     public MyHash<String, Pelicula> getPeliculas() {
         return peliculas;
     }
 
+    public MyHash<String, Coleccion> getColecciones() {
+        return colecciones;
+    }
 
+    public MyHash<String, Participante> getParticipantes() {
+        return participantes;
+    }
 
     public void topPeliculasPorIdioma() {
         String [] idiomas = {"en", "fr", "it", "es", "pt"};
@@ -59,6 +56,26 @@ public class UMovieService {
 
 
     }
+/*
+    private static void ordenarPorCalificaciones(MyList<Pelicula> lista) {
+        ArrayHeap<Pelicula> heap = new ArrayHeap<>(lista.size() + 1, true); // true = MaxHeap
+
+        for (int i = 0; i < lista.size(); i++) {
+            heap.insert(lista.get(i));
+        }
+
+        // Limpiamos lista original
+        while (lista.size() > 0) {
+            lista.remove(0);
+        }
+
+        // Recuperamos elementos en orden descendente
+        while (heap.size() > 0) {
+            lista.add(heap.delete());
+        }
+    }
+    */
+
 
     /*private static void ordenarPorCalificaciones(MyList<Pelicula> lista) {
         int n = lista.size();

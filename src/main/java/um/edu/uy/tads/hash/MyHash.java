@@ -22,5 +22,6 @@ public interface MyHash<K,T> {
 
     Node<K, T>[] getArray();
 
+    boolean contains(K key);
 
 }
