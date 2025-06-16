@@ -17,6 +17,11 @@ public class Node<K, T> {
         return key;
     }
 
+    // agrego set value
+    public void setValue(T value) {
+        this.value = value;
+    }
+
     // comparamos por clase
     @Override
     public boolean equals(Object o) {

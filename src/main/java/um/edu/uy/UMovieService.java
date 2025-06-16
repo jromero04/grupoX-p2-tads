@@ -29,6 +29,14 @@ public class UMovieService {
         return participantes;
     }
 
+    public MyHash<String, Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public MyList<Calificacion> getCalificaciones() {
+        return calificaciones;
+    }
+
     public void topPeliculasPorIdioma() {
         String [] idiomas = {"en", "fr", "it", "es", "pt"};
 
@@ -40,7 +48,10 @@ public class UMovieService {
                 if (nodo != null) {
                     Pelicula p = nodo.getValue();
                     if (p.getIdiomaOriginal().equals(idioma)) {
-                        heap.insert(p);
+                        // Verificar si la película tiene calificaciones
+                        if (p.getCantidadDeCalificaciones() > 0) {
+                            heap.insert(p);
+                        }
                     }
                 }
             }

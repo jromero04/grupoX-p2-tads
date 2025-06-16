@@ -83,7 +83,7 @@ public class Pelicula implements Comparable<Pelicula>{
     }
 
     public MyList<Calificacion> getCalificaciones() {
-        return calificaciones;
+        return this.calificaciones;
     }
 
     public int getCantidadDeCalificaciones(){

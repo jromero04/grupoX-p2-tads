@@ -1,17 +1,97 @@
 package um.edu.uy;
 
-import um.edu.uy.entities.Coleccion;
-import um.edu.uy.entities.Participante;
-import um.edu.uy.entities.Pelicula;
+import um.edu.uy.entities.*;
 import um.edu.uy.tads.hash.Exceptions.InvalidHashKey;
+import um.edu.uy.tads.hash.Hash;
+import um.edu.uy.tads.hash.MyHash;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public class CargaCSV {
 
-    public void cargarPeliculas(UMovieService servicio) {
+    public MyHash<String, Boolean> cargarCalificaciones(UMovieService servicio) {
+        String ruta = "ratings_1mm.csv";
+        int cargadas = 0;
+
+        MyHash<String, Boolean> peliculasConCalificacion = new Hash<>(10000); // clave = id_pelicula
+
+        try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
+            String cabecera = br.readLine(); // descartar cabecera
+
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] partes = linea.split(",");
+
+                if (partes.length < 4) continue;
+
+                String idUsuario = partes[0].trim();
+                String idPelicula = partes[1].trim();
+                String ratingStr = partes[2].trim();
+                String timeStr = partes[3].trim();
+
+                if (idUsuario.isEmpty() || idPelicula.isEmpty() || ratingStr.isEmpty() || timeStr.isEmpty()) continue;
+
+                double puntaje;
+                long timestamp;
+                try {
+                    puntaje = Double.parseDouble(ratingStr);
+                    timestamp = Long.parseLong(timeStr);
+                } catch (NumberFormatException e) {
+                    System.out.println("Error al parsear puntaje o timestamp: " + e.getMessage());
+                    continue;
+                }
+
+                //Convierto a LocalDateTime
+                LocalDateTime fecha = Instant.ofEpochSecond(timestamp).atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+
+                // Marcar la película como vista
+                peliculasConCalificacion.add(idPelicula, true);
+
+                // Obtener o crear el usuario
+                Usuario usuario;
+                try {
+                    usuario = servicio.getUsuarios().search(idUsuario);
+                } catch (InvalidHashKey e) {
+                    usuario = new Usuario(idUsuario);
+                    servicio.getUsuarios().add(idUsuario, usuario);
+                }
+
+                // Crear y asignar calificación
+                Calificacion calificacion = new Calificacion(idUsuario, idPelicula, puntaje, fecha);
+                usuario.agregarCalificacion(calificacion);
+
+                servicio.getCalificaciones().add(calificacion); // una lista global
+
+                //  asignar la calificación a la película
+                try {
+                    Pelicula pelicula = servicio.getPeliculas().search(idPelicula);
+                    pelicula.agregarCalificacion(calificacion);
+                } catch (InvalidHashKey e) {
+                    //System.out.println("Película no encontrada: " + idPelicula);
+                }
+
+                // Mensaje de depuración
+                //System.out.println("Calificación cargada: Usuario=" + idUsuario + ", Película=" + idPelicula + ", Puntaje=" + puntaje + ", Fecha=" + fecha);
+
+                cargadas++;
+            }
+
+            System.out.println("Calificaciones cargadas: " + cargadas);
+        } catch (IOException e) {
+            System.out.println("Error leyendo ratings_1mm.csv");
+            e.printStackTrace();
+        }
+
+        return peliculasConCalificacion;
+    }
+
+    public void cargarPeliculas(UMovieService servicio,  MyHash<String, Boolean> vistas) {
         String ruta = "movies_metadata.csv";
         int cargadas = 0;
         //ruta del archivo
@@ -20,6 +100,7 @@ public class CargaCSV {
 
             String linea;
             while ((linea = br.readLine()) != null) {
+
                 // usamos split por coma, PERO con control de comas dentro de comillas
                 String[] partes = linea.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
 
@@ -36,6 +117,9 @@ public class CargaCSV {
 
                 // Validacion: id no vacío y numérico
                 if (id.isEmpty() || !id.matches("\\d+")) continue;
+
+                // nuevo
+                //if (!vistas.contains(id)) continue;
 
                 double ingresos = 0;
                 if (!ingresosStr.isEmpty() && ingresosStr.matches("\\d+")) {
@@ -58,6 +142,7 @@ public class CargaCSV {
                         }
                     }
                 }
+
 
                 // proceso coleccion
                 if (!coleccionStr.isEmpty() && coleccionStr.contains("'name':")) {
@@ -99,6 +184,7 @@ public class CargaCSV {
 
                         p.setColeccion(coleccion); // vinculamos la colección a la película
                     }
+
                 }
 
                 servicio.getPeliculas().add(id, p);
@@ -112,7 +198,7 @@ public class CargaCSV {
         }
     }
 
-    public void cargarCreditos(UMovieService servicio) {
+    public void cargarCreditos(UMovieService servicio, MyHash<String, Boolean> vistas) {
         String ruta = "credits.csv";
         int procesadas = 0;
 
@@ -128,36 +214,30 @@ public class CargaCSV {
                 String crewStr = partes[1].trim();
                 String idPelicula = partes[2].trim();
 
-                if (idPelicula.isEmpty()) continue;
+                // valido id y filtro por peliculas vistas
+                if (idPelicula.isEmpty() || !idPelicula.matches("\\d+")) continue;
+                if (!vistas.contains(idPelicula)) continue;
 
-                Pelicula p;
+                Pelicula pelicula;
                 try {
-                    p = servicio.getPeliculas().search(idPelicula);
+                    pelicula = servicio.getPeliculas().search(idPelicula);
                 } catch (InvalidHashKey e) {
                     continue; // la película no existe
                 }
 
-                //Procesar director
+
+                // Procesar director
                 if (crewStr.contains("'job': 'Director'")) {
                     String[] crewMiembros = crewStr.split("\\},");
                     for (String miembro : crewMiembros) {
                         if (miembro.contains("'job': 'Director'") && miembro.contains("'name':")) {
-                            int nameIdx = miembro.indexOf("'name':");
-                            int start = miembro.indexOf("'", nameIdx + 8);
-                            int end = miembro.indexOf("'", start + 1);
-                            if (start != -1 && end != -1) {
-                                String nombre = miembro.substring(start + 1, end);
-                                String claveDirector = nombre + "-Director";
-                                Participante director;
-                                try {
-                                    director = servicio.getParticipantes().search(claveDirector);
-                                } catch (InvalidHashKey e) {
-                                    director = new Participante(nombre, "Director");
-                                    servicio.getParticipantes().add(claveDirector, director);
-                                }
+                            String nombreDirector = extraerNombre(miembro, "'name':");
+                            if (nombreDirector != null) {
+                                String claveDirector = nombreDirector + "-Director";
+                                Participante director = obtenerOCrearParticipante(servicio, claveDirector, nombreDirector, "Director");
                                 director.agregarPelicula(idPelicula);
-                                p.setDirector(director);
-                                break; // solo 1 director
+                                pelicula.setDirector(director);
+                                break; // Solo procesar un director
                             }
                         }
                     }
@@ -168,22 +248,12 @@ public class CargaCSV {
                     String[] actores = castStr.split("\\},");
                     for (String actor : actores) {
                         if (actor.contains("'name':")) {
-                            int nameIdx = actor.indexOf("'name':");
-                            int start = actor.indexOf("'", nameIdx + 8);
-                            int end = actor.indexOf("'", start + 1);
-                            if (start != -1 && end != -1) {
-                                String nombreActor = actor.substring(start + 1, end);
+                            String nombreActor = extraerNombre(actor, "'name':");
+                            if (nombreActor != null) {
                                 String claveActor = nombreActor + "-Actor";
-                                Participante actorObj;
-                                try {
-                                    actorObj = servicio.getParticipantes().search(claveActor);
-                                } catch (InvalidHashKey e) {
-                                    actorObj = new Participante(nombreActor, "Actor");
-                                    servicio.getParticipantes().add(claveActor, actorObj);
-                                }
+                                Participante actorObj = obtenerOCrearParticipante(servicio, claveActor, nombreActor, "Actor");
                                 actorObj.agregarPelicula(idPelicula);
-                                p.agregarParticipante(actorObj);
-
+                                pelicula.agregarParticipante(actorObj);
                             }
                         }
                     }
@@ -199,6 +269,27 @@ public class CargaCSV {
             e.printStackTrace();
         }
     }
+    // Metodo auxiliar para extraer nombres
+    private String extraerNombre(String texto, String campo) {
+        int nameIdx = texto.indexOf(campo);
+        int start = texto.indexOf("'", nameIdx + campo.length());
+        int end = texto.indexOf("'", start + 1);
+        if (start != -1 && end != -1) {
+            return texto.substring(start + 1, end);
+        }
+        return null;
+    }
 
+    // Metodo auxiliar para obtener o crear un participante
+    private Participante obtenerOCrearParticipante(UMovieService servicio, String clave, String nombre, String rol) {
+        Participante participante;
+        try {
+            participante = servicio.getParticipantes().search(clave);
+        } catch (InvalidHashKey e) {
+            participante = new Participante(nombre, rol);
+            servicio.getParticipantes().add(clave, participante);
+        }
+        return participante;
+    }
 
 }

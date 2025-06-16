@@ -1,12 +1,14 @@
 package um.edu.uy.entities;
 
+import java.time.LocalDateTime;
+
 public class Calificacion {
     private String idUsuario;
     private String idPelicula;
     private double puntaje;
-    private String fecha; // ver que formato
+    private LocalDateTime fecha; // ver que formato
 
-    public Calificacion(String idUsuario, String idPelicula, double puntaje, String fecha) {
+    public Calificacion(String idUsuario, String idPelicula, double puntaje, LocalDateTime fecha) {
         this.idUsuario = idUsuario;
         this.idPelicula = idPelicula;
         this.puntaje = puntaje;
@@ -25,9 +27,13 @@ public class Calificacion {
         return puntaje;
     }
 
-    public String getFecha() {
-        return fecha;
+    // chequeo por mes?
+
+    public int getMes() {
+        return fecha.getMonthValue();
     }
 
-    // chequeo por mes?
+    public String getMesNombre(){
+        return fecha.getMonth().name();
+    }
 }
