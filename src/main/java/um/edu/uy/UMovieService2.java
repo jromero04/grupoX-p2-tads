@@ -25,7 +25,7 @@ public class UMovieService2 {
             for (Node<String, Pelicula> nodo : arreglo) {
                 if (nodo != null) {
                     Pelicula p = nodo.getValue();
-                    System.out.println(p.getTitulo_pelicula());
+                    System.out.println(p.getTituloPelicula());
                 }
             }
 

@@ -4,16 +4,16 @@ import um.edu.uy.tads.List.MyLinkedList;
 import um.edu.uy.tads.List.MyList;
 
 public class Usuario {
-    private String id_usuario;
+    private String idUsuario;
     private MyList<Calificacion> calificaciones;
 
-    public Usuario(String id_usuario) {
-        this.id_usuario = id_usuario;
+    public Usuario(String idUsuario) {
+        this.idUsuario = idUsuario;
         this.calificaciones = new MyLinkedList<>();
     }
 
-    public String getId_usuario() {
-        return id_usuario;
+    public String getIdUsuario() {
+        return idUsuario;
     }
 
     public MyList<Calificacion> getCalificaciones() {

@@ -18,7 +18,7 @@ public class CargaCSV {
         String ruta = "ratings_1mm.csv";
         int cargadas = 0;
 
-        MyHash<String, Boolean> peliculasConCalificacion = new Hash<>(10000); // clave = id_pelicula
+        MyHash<String, Boolean> peliculasConCalificacion = new Hash<>(10000); // clave = idPelicula
 
         try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
             String cabecera = br.readLine(); // descartar cabecera

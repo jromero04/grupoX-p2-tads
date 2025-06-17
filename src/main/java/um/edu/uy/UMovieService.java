@@ -63,7 +63,7 @@ public class UMovieService {
             System.out.println("Top 5 para idioma: " + idioma);
             for (int i = 0; i < 5 && heap.size() > 0; i++) {
                 Pelicula p = heap.delete();
-                System.out.println(p.getId_pelicula() + ", " + p.getTitulo_pelicula() + ", " + p.getCantidadDeCalificaciones() + ", " + p.getIdiomaOriginal());
+                System.out.println(p.getIdPelicula() + ", " + p.getTituloPelicula() + ", " + p.getCantidadDeCalificaciones() + ", " + p.getIdiomaOriginal());
             }
             System.out.println();
         }
@@ -128,7 +128,7 @@ public class UMovieService {
                 double cantidadCalificaciones = p.getCantidadDeCalificaciones();
                 double clasificacionMedia = totalPuntaje/cantidadCalificaciones;
 
-                System.out.println(p.getTitulo_pelicula());
+                System.out.println(p.getTituloPelicula());
             }
 
 
@@ -137,7 +137,7 @@ public class UMovieService {
 
     public void mejorCalificacion(MyHash<String, Pelicula> peliculas) {
 
-        List<Consulta2> promedioAuxiliar = new ArrayList<>();
+        List<Consulta2> promedioAuxiliar = new ArrayList<>();   //fijate si usar heap para evitar el sorting
 
         Node<String, Pelicula>[] arreglo = peliculas.getArray();
         for (Node<String, Pelicula> nodo : arreglo) {
@@ -150,8 +150,10 @@ public class UMovieService {
                     double cantidadCalificaciones = p.getCantidadDeCalificaciones();
                     double clasificacionMedia = totalPuntaje/cantidadCalificaciones;
 
-                    Consulta2 promedios = new Consulta2(p.getId_pelicula(), p.getTitulo_pelicula(), clasificacionMedia);
+                    Consulta2 promedios = new Consulta2(p.getIdPelicula(), p.getTituloPelicula(), clasificacionMedia);
                 }
+
+                //falta hacer el sorting
             }
 
 

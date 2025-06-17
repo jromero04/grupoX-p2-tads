@@ -4,28 +4,28 @@ package um.edu.uy;
 // igual vuelvo a calcular resultados cada vez que hago consulta
 
 public class Consulta2 {
-    private String id_pelicula;
-    private String titulo_pelicula;
+    private String idPelicula;
+    private String tituloPelicula;
     private double calificacionMedia;
 
-    public Consulta2(String Id_pelicula, String titulo_pelicula, double calificacionMedia){
-        this.id_pelicula = id_pelicula;
-        this.titulo_pelicula = titulo_pelicula;
+    public Consulta2(String IdPelicula, String tituloPelicula, double calificacionMedia){
+        this.idPelicula = idPelicula;
+        this.tituloPelicula = tituloPelicula;
         this.calificacionMedia = calificacionMedia;
     }
 
-    public String getId_pelicula() {return id_pelicula;}
+    public String getIdPelicula() {return idPelicula;}
 
-    public String getTitulo_pelicula(){return titulo_pelicula;}
+    public String getTituloPelicula(){return tituloPelicula;}
 
     public double getCalificacionMedia(){return calificacionMedia;}
 
-    public void setId_pelicula(String idPelicula) {
-        this.id_pelicula = id_pelicula;
+    public void setIdPelicula(String idPelicula) {
+        this.idPelicula = idPelicula;
     }
 
-    public void setTitulo_pelicula(String titulo_pelicula) {
-        this.titulo_pelicula = titulo_pelicula;
+    public void setTituloPelicula(String tituloPelicula) {
+        this.tituloPelicula = tituloPelicula;
     }
 
     public void setCalificacionMedia(double calificacionMedia) {

@@ -6,8 +6,8 @@ import um.edu.uy.tads.hash.Hash;
 import um.edu.uy.tads.hash.MyHash;
 
 public class Pelicula implements Comparable<Pelicula>{
-    private String id_pelicula;
-    private String titulo_pelicula;
+    private String idPelicula;
+    private String tituloPelicula;
     private String idiomaOriginal;
     private double ingresos;
     private MyList<String> generos = new MyLinkedList<>();
@@ -16,19 +16,19 @@ public class Pelicula implements Comparable<Pelicula>{
     private MyHash<String,Participante> elenco = new Hash<>(100);
     private MyList<Calificacion> calificaciones = new MyLinkedList<>();
 
-    public Pelicula(String id_pelicula, String titulo_pelicula, String idiomaOriginal, double ingresos) {
-        this.id_pelicula = id_pelicula;
-        this.titulo_pelicula = titulo_pelicula;
+    public Pelicula(String idPelicula, String tituloPelicula, String idiomaOriginal, double ingresos) {
+        this.idPelicula = idPelicula;
+        this.tituloPelicula = tituloPelicula;
         this.idiomaOriginal = idiomaOriginal;
         this.ingresos = ingresos;
     }
 
-    public String getId_pelicula() {
-        return id_pelicula;
+    public String getIdPelicula() {
+        return idPelicula;
     }
 
-    public String getTitulo_pelicula() {
-        return titulo_pelicula;
+    public String getTituloPelicula() {
+        return tituloPelicula;
     }
 
     public String getIdiomaOriginal() {
@@ -72,7 +72,7 @@ public class Pelicula implements Comparable<Pelicula>{
     }
 
     public void agregarParticipante(Participante p) {
-        String clave = p.getNombre_participante() + "-" + p.getRol();
+        String clave = p.getNombreParticipante() + "-" + p.getRol();
         if (!elenco.contains(clave)) {
             elenco.add(clave, p);
         }
@@ -92,7 +92,7 @@ public class Pelicula implements Comparable<Pelicula>{
 
     @Override
     public String toString() {
-        return id_pelicula + ", " + titulo_pelicula + ", " + idiomaOriginal;
+        return idPelicula + ", " + tituloPelicula + ", " + idiomaOriginal;
     }
 
     @Override
