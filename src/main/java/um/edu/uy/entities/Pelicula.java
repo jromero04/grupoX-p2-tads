@@ -4,6 +4,9 @@ import um.edu.uy.tads.List.MyLinkedList;
 import um.edu.uy.tads.List.MyList;
 import um.edu.uy.tads.hash.Hash;
 import um.edu.uy.tads.hash.MyHash;
+import um.edu.uy.tads.heap.ArrayHeap;
+
+import java.util.Arrays;
 
 public class Pelicula implements Comparable<Pelicula>{
     private String id_pelicula;
@@ -11,7 +14,7 @@ public class Pelicula implements Comparable<Pelicula>{
     private String idiomaOriginal;
     private double ingresos;
     private MyList<String> generos = new MyLinkedList<>();
-    private Participante director;
+    private MyHash<String,Participante> directores = new Hash<>(5);
     private Coleccion coleccion;
     private MyHash<String,Participante> elenco = new Hash<>(100);
     private MyList<Calificacion> calificaciones = new MyLinkedList<>();
@@ -51,12 +54,19 @@ public class Pelicula implements Comparable<Pelicula>{
         this.generos.add(genero);
     }
 
-    public Participante getDirector() {
-        return director;
+    public MyHash<String, Participante> getDirectores() {
+        return directores;
     }
 
-    public void setDirector(Participante director) {
-        this.director = director;
+    public void setDirectores(MyHash<String, Participante> directores) {
+        this.directores = directores;
+    }
+
+    public void agregarDirector(Participante nuevoDirector) {
+        String clave = nuevoDirector.getNombre_participante() + "-" + nuevoDirector.getRol();
+        if (!directores.contains(clave)) {
+            directores.add(clave, nuevoDirector);
+        }
     }
 
     public Coleccion getColeccion() {
@@ -90,6 +100,36 @@ public class Pelicula implements Comparable<Pelicula>{
         return this.calificaciones.size();
     }
 
+    public double getPromedioCalificaciones(){
+        if (calificaciones.size() == 0) return 0;
+        double suma = 0;
+        for (int i = 0; i< calificaciones.size(); i++){
+            suma += calificaciones.get(i).getPuntaje();
+        }
+        return suma / calificaciones.size();
+    }
+
+    public double getMedianaCalificaciones(){
+        int n = calificaciones.size();
+        if (n==0) return 0;
+
+
+        // Extraer los puntajes de las calificaciones
+        double[] puntajes = new double[n];
+        for (int i = 0; i < n; i++) {
+            puntajes[i] = calificaciones.get(i).getPuntaje();
+        }
+
+        // Ordenar los puntajes
+        Arrays.sort(puntajes);
+
+        // Calcular la mediana
+        if (n % 2 == 0) {
+            return (puntajes[n / 2 - 1] + puntajes[n / 2]) / 2.0;
+        } else {
+            return puntajes[n / 2];
+        }
+    }
     @Override
     public String toString() {
         return id_pelicula + ", " + titulo_pelicula + ", " + idiomaOriginal;

@@ -63,7 +63,7 @@ public class CargaCSV {
                 }
 
                 // Crear y asignar calificación
-                Calificacion calificacion = new Calificacion(idUsuario, idPelicula, puntaje, fecha);
+                Calificacion calificacion = new Calificacion(usuario, idPelicula, puntaje, fecha);
                 usuario.agregarCalificacion(calificacion);
 
                 servicio.getCalificaciones().add(calificacion); // una lista global
@@ -179,7 +179,7 @@ public class CargaCSV {
                             servicio.getColecciones().add(idColeccion, coleccion);
                         }
 
-                        coleccion.agregarPelicula(id);
+                        coleccion.agregarPelicula(p);
                         coleccion.setIngresosTotales(coleccion.getIngresosTotales() + ingresos); // acumular ingresos
 
                         p.setColeccion(coleccion); // vinculamos la colección a la película
@@ -198,7 +198,7 @@ public class CargaCSV {
         }
     }
 
-    public void cargarCreditos(UMovieService servicio, MyHash<String, Boolean> vistas) {
+    /*public void cargarCreditos(UMovieService servicio, MyHash<String, Boolean> vistas) {
         String ruta = "credits.csv";
         int procesadas = 0;
 
@@ -268,7 +268,7 @@ public class CargaCSV {
             System.out.println("Error leyendo credits.csv");
             e.printStackTrace();
         }
-    }
+    }*/
     // Metodo auxiliar para extraer nombres
     private String extraerNombre(String texto, String campo) {
         int nameIdx = texto.indexOf(campo);
@@ -292,4 +292,181 @@ public class CargaCSV {
         return participante;
     }
 
+    public void cargarSoloDirectores(UMovieService servicio, MyHash<String, Boolean> vistas) {
+        String ruta = "credits.csv";
+        int procesadas = 0;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
+            String cabecera = br.readLine(); // descartar cabecera
+
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] partes = linea.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+                if (partes.length < 3) continue;
+
+                String crewStr = partes[1].trim();
+                String idPelicula = partes[2].trim();
+
+                // Validar ID de película y filtrar por vistas
+                if (idPelicula.isEmpty() || !idPelicula.matches("\\d+") || !vistas.contains(idPelicula)) continue;
+
+                Pelicula pelicula;
+                try {
+                    pelicula = servicio.getPeliculas().search(idPelicula);
+                } catch (InvalidHashKey e) {
+                    continue; // La película no existe
+                }
+
+                // Procesar director
+                if (crewStr.contains("'job': 'Director'")) {
+                    int start = crewStr.indexOf("'job': 'Director'");
+                    if (start != -1) {
+                        int nameIdx = crewStr.indexOf("'name':", start);
+                        int nameStart = crewStr.indexOf("'", nameIdx + 8);
+                        int nameEnd = crewStr.indexOf("'", nameStart + 1);
+                        if (nameStart != -1 && nameEnd != -1) {
+                            String nombreDirector = crewStr.substring(nameStart + 1, nameEnd);
+                            String claveDirector = nombreDirector + "-Director";
+                            Participante director = obtenerOCrearParticipante(servicio, claveDirector, nombreDirector, "Director");
+                            director.agregarPelicula(idPelicula);
+                            pelicula.setDirector(director);
+                        }
+                    }
+                    procesadas++;
+                    continue; // Pasar a la siguiente película
+                }
+            }
+
+            System.out.println("Directores procesados: " + procesadas);
+        } catch (IOException e) {
+            System.out.println("Error leyendo credits.csv");
+            e.printStackTrace();
+        }
+    }
+
+
+    public void cargarSoloDirectoresOptimizado(UMovieService servicio, MyHash<String, Boolean> vistas) {
+        String ruta = "credits.csv";
+        int procesadas = 0;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
+            br.readLine(); // descartar cabecera
+
+            // Procesar líneas en paralelo
+            procesadas = br.lines()
+                .parallel()
+                .filter(linea -> linea.contains("'job': 'Director'"))
+                .mapToInt(linea -> procesarDirector(linea, servicio, vistas))
+                .sum();
+
+            System.out.println("Directores procesados: " + procesadas);
+        } catch (IOException e) {
+            System.out.println("Error leyendo credits.csv");
+            e.printStackTrace();
+        }
+    }
+
+    private int procesarDirector(String linea, UMovieService servicio, MyHash<String, Boolean> vistas) {
+        String[] partes = linea.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+        if (partes.length < 3) return 0;
+
+        String crewStr = partes[1].trim();
+        String idPelicula = partes[2].trim();
+
+        if (idPelicula.isEmpty() || !idPelicula.matches("\\d+") || !vistas.contains(idPelicula)) return 0;
+
+        Pelicula pelicula;
+        try {
+            pelicula = servicio.getPeliculas().search(idPelicula);
+        } catch (InvalidHashKey e) {
+            return 0; // La película no existe
+        }
+
+        int start = crewStr.indexOf("'job': 'Director'");
+        if (start != -1) {
+            int nameIdx = crewStr.indexOf("'name':", start);
+            int nameStart = crewStr.indexOf("'", nameIdx + 8);
+            int nameEnd = crewStr.indexOf("'", nameStart + 1);
+            if (nameStart != -1 && nameEnd != -1) {
+                String nombreDirector = crewStr.substring(nameStart + 1, nameEnd);
+                String claveDirector = nombreDirector + "-Director";
+                Participante director = obtenerOCrearParticipante(servicio, claveDirector, nombreDirector, "Director");
+                director.agregarPelicula(idPelicula);
+                pelicula.setDirector(director);
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    public void cargarDirectoresYActoresOptimizado(UMovieService servicio, MyHash<String, Boolean> vistas) {
+        String ruta = "credits.csv";
+        int procesadas = 0;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
+            br.readLine(); // descartar cabecera
+
+            // Procesar líneas en paralelo
+            procesadas = br.lines()
+                .parallel()
+                .mapToInt(linea -> procesarDirectorYActores(linea, servicio, vistas))
+                .sum();
+
+            System.out.println("Directores y actores procesados: " + procesadas);
+        } catch (IOException e) {
+            System.out.println("Error leyendo credits.csv");
+            e.printStackTrace();
+        }
+    }
+
+    private int procesarDirectorYActores(String linea, UMovieService servicio, MyHash<String, Boolean> vistas) {
+        String[] partes = linea.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+        if (partes.length < 3) return 0;
+
+        String castStr = partes[0].trim();
+        String crewStr = partes[1].trim();
+        String idPelicula = partes[2].trim();
+
+        if (idPelicula.isEmpty() || !idPelicula.matches("\\d+") || !vistas.contains(idPelicula)) return 0;
+
+        Pelicula pelicula;
+        try {
+            pelicula = servicio.getPeliculas().search(idPelicula);
+        } catch (InvalidHashKey e) {
+            return 0; // La película no existe
+        }
+
+        // Procesar director
+        int start = crewStr.indexOf("'job': 'Director'");
+        if (start != -1) {
+            int nameIdx = crewStr.indexOf("'name':", start);
+            int nameStart = crewStr.indexOf("'", nameIdx + 8);
+            int nameEnd = crewStr.indexOf("'", nameStart + 1);
+            if (nameStart != -1 && nameEnd != -1) {
+                String nombreDirector = crewStr.substring(nameStart + 1, nameEnd);
+                String claveDirector = nombreDirector + "-Director";
+                Participante director = obtenerOCrearParticipante(servicio, claveDirector, nombreDirector, "Director");
+                director.agregarPelicula(idPelicula);
+                pelicula.setDirector(director);
+            }
+        }
+
+        // Procesar actores
+        if (!castStr.isEmpty()) {
+            String[] actores = castStr.split("\\},");
+            for (String actor : actores) {
+                if (actor.contains("'name':")) {
+                    String nombreActor = extraerNombre(actor, "'name':");
+                    if (nombreActor != null) {
+                        String claveActor = nombreActor + "-Actor";
+                        Participante actorObj = obtenerOCrearParticipante(servicio, claveActor, nombreActor, "Actor");
+                        actorObj.agregarPelicula(idPelicula);
+                        pelicula.agregarParticipante(actorObj);
+                    }
+                }
+            }
+        }
+
+        return 1;
+    }
 }

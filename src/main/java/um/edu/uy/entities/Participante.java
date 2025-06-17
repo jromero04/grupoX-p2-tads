@@ -12,7 +12,7 @@ public class Participante {
     lista de crew donde voy a encontrar la director y al final el id de la pelicula.
     */
     private String rol;
-    private MyHash<String, Boolean> peliculas;
+    private MyHash<Pelicula, Boolean> peliculas;
 
     // ver si no agregar fecha por mes del anio para consultas
 
@@ -38,15 +38,15 @@ public class Participante {
         this.rol = rol;
     }
 
-    public MyHash<String, Boolean> getPeliculas() {
+    public MyHash<Pelicula, Boolean> getPeliculas() {
         return peliculas;
     }
 
     // evito que se agreguen mas de una vez el idPelicula
     // que pasa si un participante aparece como director y actor en una misma pelicula??
-    public void agregarPelicula(String idPelicula) {
-        if (!peliculas.contains(idPelicula)) {
-            peliculas.add(idPelicula, true);
+    public void agregarPelicula(Pelicula pelicula) {
+        if (!peliculas.contains(pelicula)) {
+            peliculas.add(pelicula, true);
         }
     }
 

@@ -3,24 +3,32 @@ package um.edu.uy.entities;
 import java.time.LocalDateTime;
 
 public class Calificacion {
-    private String idUsuario;
-    private String idPelicula;
+    private Usuario usuario;
+    private Pelicula pelicula;
     private double puntaje;
     private LocalDateTime fecha; // ver que formato
 
-    public Calificacion(String idUsuario, String idPelicula, double puntaje, LocalDateTime fecha) {
-        this.idUsuario = idUsuario;
-        this.idPelicula = idPelicula;
+    public Calificacion(Usuario usuario, Pelicula pelicula, double puntaje, LocalDateTime fecha) {
+        this.usuario = usuario;
+        this.pelicula = pelicula;
         this.puntaje = puntaje;
         this.fecha = fecha;
     }
 
-    public String getIdUsuario() {
-        return idUsuario;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public String getIdPelicula() {
-        return idPelicula;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Pelicula getPelicula() {
+        return pelicula;
+    }
+
+    public void setPelicula(Pelicula pelicula) {
+        this.pelicula = pelicula;
     }
 
     public double getPuntaje() {

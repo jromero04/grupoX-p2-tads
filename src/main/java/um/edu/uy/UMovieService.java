@@ -3,6 +3,7 @@ package um.edu.uy;
 import um.edu.uy.entities.*;
 import um.edu.uy.tads.List.MyLinkedList;
 import um.edu.uy.tads.List.MyList;
+import um.edu.uy.tads.hash.Exceptions.InvalidHashKey;
 import um.edu.uy.tads.hash.Hash;
 import um.edu.uy.tads.hash.MyHash;
 import um.edu.uy.tads.hash.Node;
@@ -88,24 +89,6 @@ public class UMovieService {
     */
 
 
-    /*private static void ordenarPorCalificaciones(MyList<Pelicula> lista) {
-        int n = lista.size();
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = 0; j < n - 1 - i; j++) {
-                Pelicula p1 = lista.get(j);
-                Pelicula p2 = lista.get(j + 1);
-                if (p1.getCantidadDeCalificaciones() < p2.getCantidadDeCalificaciones()) {
-                    // swap
-                    lista.remove(j + 1);
-                    lista.remove(j);
-                    lista.add(j, p2);
-                    lista.add(j + 1, p1);
-
-                }
-            }
-        }
-    }*/
-
 
     public void mejorCalificacion(MyList<Calificacion> calificaciones){
 
@@ -131,5 +114,101 @@ public class UMovieService {
 
         }
     }
+
+    public void top10Directores() throws InvalidHashKey {
+        MyHash<String, MyLinkedList<Double>> calificacionesPorDirector = new Hash<>(1000);
+        MyHash<String, Integer> peliculasPorDirector = new Hash<>(1000);
+
+        Node<String, Pelicula>[] nodosPeliculas = peliculas.getArray();
+
+        for (Node<String, Pelicula> nodo : nodosPeliculas) {
+            if (nodo != null) {
+                Pelicula peli = nodo.getValue();
+                Participante director = peli.getDirectores().search();
+                if (director == null) continue;
+
+                String nombreDirector = director.getNombre_participante();
+
+//                // DEBUG: mostrar datos de un director puntual
+//                if (nombreDirector.equals("Nora Ephron")) {
+//                    System.out.println("Película de Nora Ephron: " + peli.getTitulo_pelicula());
+//                    System.out.println("   Calificaciones:");
+//                    for (int i = 0; i < peli.getCalificaciones().size(); i++) {
+//                        Calificacion c = peli.getCalificaciones().get(i);
+//                        System.out.print(c.getPuntaje() + " ");
+//                    }
+//                    System.out.println("\n---");
+//                }
+
+                MyList<Calificacion> calificaciones = peli.getCalificaciones();
+                if (calificaciones == null || calificaciones.size() == 0) continue;
+
+                if (!calificacionesPorDirector.contains(nombreDirector)) {
+                    calificacionesPorDirector.add(nombreDirector, new MyLinkedList<>());
+                    peliculasPorDirector.add(nombreDirector, 0);
+                }
+
+                for (int i = 0; i < calificaciones.size(); i++) {
+                    Calificacion calificacion = calificaciones.get(i);
+                    calificacionesPorDirector.search(nombreDirector).add(calificacion.getPuntaje());
+                }
+
+                int cantPeliculas = peliculasPorDirector.search(nombreDirector);
+                peliculasPorDirector.add(nombreDirector, cantPeliculas + 1);
+            }
+        }
+
+        ArrayHeap<InfoDirector> heap = new ArrayHeap<>(1000, true); // heap máximo
+
+        for (Node<String, MyLinkedList<Double>> nodo : calificacionesPorDirector.getArray()) {
+            if (nodo != null) {
+                String director = nodo.getKey();
+                MyLinkedList<Double> califs = nodo.getValue();int totalCalificaciones = califs.size();
+            int cantPeliculas = peliculasPorDirector.search(director);
+
+            if (totalCalificaciones > 100 && cantPeliculas > 1) {
+                double mediana = calcularMediana(califs);
+                heap.insert(new InfoDirector(director, cantPeliculas, mediana));
+            }
+        }
+        }
+
+        int i = 0;
+        while (heap.size() > 0 && i < 10) {
+            InfoDirector d = heap.delete();
+            System.out.println(d.getNombre() + "," + d.getCantidadPeliculas() + "," + d.getMediana());
+            i++;
+        }
+
+    }
+
+    private double calcularMediana(MyLinkedList<Double> lista) {
+        int n = lista.size();
+        double[] arr = new double[n];
+        for (int i = 0; i < lista.size(); i++) {
+            arr[i] = lista.get(i);
+        }
+
+        ordenarArray(arr);
+
+        if (n % 2 == 0) {
+            return (arr[n/2 - 1] + arr[n/2]) / 2.0;
+        } else {
+            return arr[n/2];
+        }
+    }
+
+    private void ordenarArray(double[] arr) {
+        for (int i = 0; i < arr.length - 1; i++) {
+            for (int j = i + 1; j < arr.length; j++) {
+                if (arr[i] > arr[j]) {
+                    double temp = arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = temp;
+                }
+            }
+        }
+    }
+
 }
 

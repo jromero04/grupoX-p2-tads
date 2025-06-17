@@ -6,7 +6,7 @@ import um.edu.uy.tads.List.MyList;
 public class Coleccion implements Comparable<Coleccion>{
     private String idColeccion;
     private String tituloColeccion;
-    private MyList<String> idPelicula;
+    private MyList<Pelicula> peliculas;
     private double ingresosTotales;
 
     // ver como calculo los ingresos totales luego.
@@ -14,7 +14,7 @@ public class Coleccion implements Comparable<Coleccion>{
     public Coleccion(String idColeccion, String tituloColeccion) {
         this.idColeccion = idColeccion;
         this.tituloColeccion = tituloColeccion;
-        this.idPelicula = new MyLinkedList<>();
+        this.peliculas = new MyLinkedList<>();
         this.ingresosTotales = 0;
     }
 
@@ -34,8 +34,12 @@ public class Coleccion implements Comparable<Coleccion>{
         this.tituloColeccion = tituloColeccion;
     }
 
-    public MyList<String> getIdPelicula() {
-        return idPelicula;
+    public MyList<Pelicula> getPeliculas() {
+        return peliculas;
+    }
+
+    public void setPeliculas(MyList<Pelicula> peliculas) {
+        this.peliculas = peliculas;
     }
 
     public double getIngresosTotales() {
@@ -46,18 +50,18 @@ public class Coleccion implements Comparable<Coleccion>{
         this.ingresosTotales = ingresosTotales;
     }
 
-    public void agregarPelicula(String id){
+    public void agregarPelicula(Pelicula nuevaPelicula){
         boolean yaRegistrada = false;
-        for (int i = 0; i<idPelicula.size(); i++){
-            if (idPelicula.get(i).equals(id)){
+        for (int i = 0; i<peliculas.size(); i++){
+            if (peliculas.get(i).getId_pelicula().equals(nuevaPelicula.getId_pelicula())){
                 yaRegistrada = true;
                 break;
             }
         }
         if (!yaRegistrada){
-            this.idPelicula.add(id);
+            this.peliculas.add(nuevaPelicula);
         } else {
-            System.out.println("La pelicula con id: " + id + "ya esta registrada en la coleccion (" + tituloColeccion +")");
+            System.out.println("La pelicula con id: " + nuevaPelicula.getId_pelicula() + "ya esta registrada en la coleccion (" + tituloColeccion +")");
         }
     }
 
