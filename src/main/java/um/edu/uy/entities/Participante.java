@@ -7,7 +7,7 @@ import um.edu.uy.tads.hash.MyHash;
 import java.util.Objects;
 
 public class Participante {
-    private String nombre_participante;
+    private String nombreParticipante;
     /* los roles se encuentran en CSV credits, lista enorme de cast
     lista de crew donde voy a encontrar la director y al final el id de la pelicula.
     */
@@ -16,18 +16,18 @@ public class Participante {
 
     // ver si no agregar fecha por mes del anio para consultas
 
-    public Participante(String nombre_participante, String rol) {
-        this.nombre_participante = nombre_participante;
+    public Participante(String nombreParticipante, String rol) {
+        this.nombreParticipante = nombreParticipante;
         this.rol = rol;
         this.peliculas = new Hash<>(100);
     }
 
-    public String getNombre_participante() {
-        return nombre_participante;
+    public String getNombreParticipante() {
+        return nombreParticipante;
     }
 
-    public void setNombre_participante(String nombre_participante) {
-        this.nombre_participante = nombre_participante;
+    public void setNombreParticipante(String nombreParticipante) {
+        this.nombreParticipante = nombreParticipante;
     }
 
     public String getRol() {
@@ -59,11 +59,11 @@ public class Participante {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Participante that)) return false;
-        return Objects.equals(nombre_participante, that.nombre_participante) && Objects.equals(rol, that.rol);
+        return Objects.equals(nombreParticipante, that.nombreParticipante) && Objects.equals(rol, that.rol);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nombre_participante, rol);
+        return Objects.hash(nombreParticipante, rol);
     }
 }

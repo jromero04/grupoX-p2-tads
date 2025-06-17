@@ -9,6 +9,9 @@ import um.edu.uy.tads.hash.MyHash;
 import um.edu.uy.tads.hash.Node;
 import um.edu.uy.tads.heap.ArrayHeap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UMovieService {
     private MyHash<String, Pelicula> peliculas  = new Hash<>(100);
     private MyHash<String, Usuario> usuarios = new Hash<>(100);
@@ -61,7 +64,7 @@ public class UMovieService {
             System.out.println("Top 5 para idioma: " + idioma);
             for (int i = 0; i < 5 && heap.size() > 0; i++) {
                 Pelicula p = heap.delete();
-                System.out.println(p.getId_pelicula() + ", " + p.getTitulo_pelicula() + ", " + p.getCantidadDeCalificaciones() + ", " + p.getIdiomaOriginal());
+                System.out.println(p.getIdPelicula() + ", " + p.getTituloPelicula() + ", " + p.getCantidadDeCalificaciones() + ", " + p.getIdiomaOriginal());
             }
             System.out.println();
         }
@@ -94,7 +97,7 @@ public class UMovieService {
 
     }
 
-    public void mejorCalificacion(MyHash<String, Pelicula> peliculas) {
+    public void LLmejorCalificacion(MyHash<String, Pelicula> peliculas) {
         Node<String, Pelicula>[] arreglo = peliculas.getArray();
         MyList<MyLinkedList> pelicu;
         for (Node<String, Pelicula> nodo : arreglo) {
@@ -108,7 +111,32 @@ public class UMovieService {
                 double cantidadCalificaciones = p.getCantidadDeCalificaciones();
                 double clasificacionMedia = totalPuntaje/cantidadCalificaciones;
 
-                System.out.println(p.getTitulo_pelicula());
+                System.out.println(p.getTituloPelicula());
+            }
+
+
+        }
+    }
+
+    public void mejorCalificacion(MyHash<String, Pelicula> peliculas) {
+
+        List<Consulta2> promedioAuxiliar = new ArrayList<>();   //fijate si usar heap para evitar el sorting
+
+        Node<String, Pelicula>[] arreglo = peliculas.getArray();
+        for (Node<String, Pelicula> nodo : arreglo) {
+            if (nodo != null) {
+                Pelicula p = nodo.getValue();
+                Double totalPuntaje = 0.0;
+                for (int index = 0; index < p.getCalificaciones().size(); index++) {
+                    Double puntaje = p.getCalificaciones().get(index).getPuntaje();
+                    totalPuntaje += puntaje;
+                    double cantidadCalificaciones = p.getCantidadDeCalificaciones();
+                    double clasificacionMedia = totalPuntaje/cantidadCalificaciones;
+
+                    Consulta2 promedios = new Consulta2(p.getIdPelicula(), p.getTituloPelicula(), clasificacionMedia);
+                }
+
+                //falta hacer el sorting
             }
 
 
