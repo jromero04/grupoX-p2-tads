@@ -8,6 +8,9 @@ import um.edu.uy.tads.hash.MyHash;
 import um.edu.uy.tads.hash.Node;
 import um.edu.uy.tads.heap.ArrayHeap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UMovieService {
     private MyHash<String, Pelicula> peliculas  = new Hash<>(100);
     private MyHash<String, Usuario> usuarios = new Hash<>(100);
@@ -111,7 +114,7 @@ public class UMovieService {
 
     }
 
-    public void mejorCalificacion(MyHash<String, Pelicula> peliculas) {
+    public void LLmejorCalificacion(MyHash<String, Pelicula> peliculas) {
         Node<String, Pelicula>[] arreglo = peliculas.getArray();
         MyList<MyLinkedList> pelicu;
         for (Node<String, Pelicula> nodo : arreglo) {
@@ -126,6 +129,29 @@ public class UMovieService {
                 double clasificacionMedia = totalPuntaje/cantidadCalificaciones;
 
                 System.out.println(p.getTitulo_pelicula());
+            }
+
+
+        }
+    }
+
+    public void mejorCalificacion(MyHash<String, Pelicula> peliculas) {
+
+        List<Consulta2> promedioAuxiliar = new ArrayList<>();
+
+        Node<String, Pelicula>[] arreglo = peliculas.getArray();
+        for (Node<String, Pelicula> nodo : arreglo) {
+            if (nodo != null) {
+                Pelicula p = nodo.getValue();
+                Double totalPuntaje = 0.0;
+                for (int index = 0; index < p.getCalificaciones().size(); index++) {
+                    Double puntaje = p.getCalificaciones().get(index).getPuntaje();
+                    totalPuntaje += puntaje;
+                    double cantidadCalificaciones = p.getCantidadDeCalificaciones();
+                    double clasificacionMedia = totalPuntaje/cantidadCalificaciones;
+
+                    Consulta2 promedios = new Consulta2(p.getId_pelicula(), p.getTitulo_pelicula(), clasificacionMedia);
+                }
             }
 
 
