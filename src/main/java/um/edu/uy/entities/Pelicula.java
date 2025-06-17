@@ -63,7 +63,7 @@ public class Pelicula implements Comparable<Pelicula>{
     }
 
     public void agregarDirector(Participante nuevoDirector) {
-        String clave = nuevoDirector.getNombre_participante() + "-" + nuevoDirector.getRol();
+        String clave = nuevoDirector.getNombreParticipante() + "-" + nuevoDirector.getRol();
         if (!directores.contains(clave)) {
             directores.add(clave, nuevoDirector);
         }

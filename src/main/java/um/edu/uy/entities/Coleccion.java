@@ -53,7 +53,7 @@ public class Coleccion implements Comparable<Coleccion>{
     public void agregarPelicula(Pelicula nuevaPelicula){
         boolean yaRegistrada = false;
         for (int i = 0; i<peliculas.size(); i++){
-            if (peliculas.get(i).getId_pelicula().equals(nuevaPelicula.getId_pelicula())){
+            if (peliculas.get(i).getIdPelicula().equals(nuevaPelicula.getIdPelicula())){
                 yaRegistrada = true;
                 break;
             }
@@ -61,7 +61,7 @@ public class Coleccion implements Comparable<Coleccion>{
         if (!yaRegistrada){
             this.peliculas.add(nuevaPelicula);
         } else {
-            System.out.println("La pelicula con id: " + nuevaPelicula.getId_pelicula() + "ya esta registrada en la coleccion (" + tituloColeccion +")");
+            System.out.println("La pelicula con id: " + nuevaPelicula.getIdPelicula() + "ya esta registrada en la coleccion (" + tituloColeccion +")");
         }
     }
 
