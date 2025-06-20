@@ -109,4 +109,10 @@ public class ArrayHeap<T extends Comparable<T>> implements ArrayHeap_interface<T
         }
         heap = nuevoHeap;
     }
+
+    public T get(int i) {                  //cambiar nombre de i?
+        return heap[i];
+    }
+
+
 }
