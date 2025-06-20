@@ -5,6 +5,11 @@ public class ArrayHeap<T extends Comparable<T>> implements ArrayHeap_interface<T
     private T[] heap;
     private int size;
     private boolean isMaxHeap;
+    private static final int default_capacity = 16;
+
+    public ArrayHeap(boolean isMaxHeap) {
+        this(default_capacity, isMaxHeap);
+    }
 
     public ArrayHeap(int capacidad, boolean isMaxHeap) {
         heap = (T[]) new Comparable[capacidad + 1];

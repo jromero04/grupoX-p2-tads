@@ -7,9 +7,10 @@ import java.util.Arrays;
 public class Hash<K, T> implements MyHash<K, T> {
     private Node<K, T>[] array;
     private int size, counter;
+    private static final int DEFAULT_SIZE = 16; // Tamaño inicial por defecto
 
-    public Hash(int size) {
-        this.size = size;
+    public Hash() {
+        this.size = DEFAULT_SIZE;
         this.counter = 0;
         array = new Node[size];
         Arrays.fill(array, null);

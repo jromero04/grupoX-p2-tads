@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UMovieService {
-    private MyHash<String, Pelicula> peliculas  = new Hash<>(100);
-    private MyHash<String, Usuario> usuarios = new Hash<>(100);
-    private MyHash<String, Participante> participantes = new Hash<>(100);
-    private MyHash<String, Coleccion> colecciones = new Hash<>(100);
+    private MyHash<String, Pelicula> peliculas = new Hash<>();
+    private MyHash<String, Usuario> usuarios = new Hash<>();
+    private MyHash<String, Participante> participantes = new Hash<>();
+    private MyHash<String, Coleccion> colecciones = new Hash<>();
 
     private MyList<Calificacion> calificaciones = new MyLinkedList<>();
 
@@ -42,10 +42,10 @@ public class UMovieService {
     }
 
     public void topPeliculasPorIdioma() {
-        String [] idiomas = {"en", "fr", "it", "es", "pt"};
+        String[] idiomas = {"en", "fr", "it", "es", "pt"};
 
         for (String idioma : idiomas) {
-            ArrayHeap<Pelicula> heap = new ArrayHeap<>(1000, true); // MaxHeap
+            ArrayHeap<Pelicula> heap = new ArrayHeap<>(true); // MaxHeap
 
             Node<String, Pelicula>[] arreglo = peliculas.getArray();
             for (Node<String, Pelicula> nodo : arreglo) {
@@ -92,12 +92,6 @@ public class UMovieService {
     */
 
 
-
-
-
-
-
-
     public void mejorCalificacion(MyHash<String, Pelicula> peliculas) {
         Node<String, Pelicula>[] arreglo = peliculas.getArray();
         ArrayHeap<Consulta2> promedioAuxiliar = new ArrayHeap<>(arreglo.length, true); //use length arreglo como capacidad del heap para que no sea fijo y dependa de la cant de datos
@@ -118,9 +112,9 @@ public class UMovieService {
 
 
 
-    public void top10Directores() throws InvalidHashKey {
-        MyHash<String, MyLinkedList<Double>> calificacionesPorDirector = new Hash<>(1000);
-        MyHash<String, Integer> peliculasPorDirector = new Hash<>(1000);
+    /*public void top10Directores() throws InvalidHashKey {
+        MyHash<String, MyLinkedList<Double>> calificacionesPorDirector = new Hash<>();
+        MyHash<String, Integer> peliculasPorDirector = new Hash<>();
 
         Node<String, Pelicula>[] nodosPeliculas = peliculas.getArray();
 
@@ -161,7 +155,7 @@ public class UMovieService {
             }
         }
 
-        ArrayHeap<InfoDirector> heap = new ArrayHeap<>(1000, true); // heap máximo
+        ArrayHeap<InfoDirector> heap = new ArrayHeap<>(true); // heap máximo
 
         for (Node<String, MyLinkedList<Double>> nodo : calificacionesPorDirector.getArray()) {
             if (nodo != null) {
@@ -211,7 +205,53 @@ public class UMovieService {
                 }
             }
         }
+    }*/
+
+    public void imprimirInfoPelicula(String id) {
+        try {
+            Pelicula p = this.peliculas.search(id);
+            System.out.println("ID: " + p.getIdPelicula());
+            System.out.println("Título: " + p.getTituloPelicula());
+            System.out.println("Idioma: " + p.getIdiomaOriginal());
+            System.out.printf("Ingresos: %,.2f\n", p.getIngresos());
+
+            System.out.print("Géneros: ");
+            for (int i = 0; i < p.getGeneros().size(); i++) {
+                System.out.print(p.getGeneros().get(i) + " ");
+            }
+            System.out.println();
+
+            Coleccion c = p.getColeccion();
+            if (c != null) {
+                System.out.println("Colección: " + c.getTituloColeccion());
+                System.out.printf("Ingresos totales de la colección: %,.2f\n", c.getIngresosTotales());
+                System.out.println("Películas en la colección:");
+                for (int i = 0; i < c.getPeliculas().size(); i++) {
+                    Pelicula peli = c.getPeliculas().get(i);
+                    System.out.println("- " + peli.getTituloPelicula() + " (ID: " + peli.getIdPelicula() + ")");
+                }
+            } else {
+                System.out.println("Colección: Ninguna");
+            }
+        } catch (InvalidHashKey e) {
+            System.out.println("No se encontró la película con ID: " + id);
+        }
     }
 
+    public void mostrarUnaPeliculaSinColeccionOriginal() {
+        Node<String, Pelicula>[] nodosPeliculas = this.peliculas.getArray();
+        for (Node<String, Pelicula> nodo : nodosPeliculas) {
+            if (nodo != null) {
+                Pelicula p = nodo.getValue();
+                Coleccion c = p.getColeccion();
+                if (c != null && c.getIdColeccion().equals(p.getIdPelicula())) {
+                    System.out.println("Encontré una película sin colección original:");
+                    imprimirInfoPelicula(p.getIdPelicula());
+                    break;
+                }
+            }
+        }
+    }
 }
+
 

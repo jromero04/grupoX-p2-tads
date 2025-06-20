@@ -1,5 +1,6 @@
-package um.edu.uy;
+package um.edu.uy.CSV;
 
+import um.edu.uy.UMovieService;
 import um.edu.uy.entities.*;
 import um.edu.uy.tads.hash.Exceptions.InvalidHashKey;
 import um.edu.uy.tads.hash.Hash;
@@ -14,11 +15,11 @@ import java.time.ZoneId;
 
 public class CargaCSV {
 
-    public MyHash<String, Boolean> cargarCalificaciones(UMovieService servicio) {
+    /*public MyHash<String, Boolean> cargarCalificaciones(UMovieService servicio) {
         String ruta = "ratings_1mm.csv";
         int cargadas = 0;
 
-        MyHash<String, Boolean> peliculasConCalificacion = new Hash<>(10000); // clave = idPelicula
+        MyHash<String, Boolean> peliculasConCalificacion = new Hash<>(); // clave = idPelicula
 
         try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
             String cabecera = br.readLine(); // descartar cabecera
@@ -269,7 +270,7 @@ public class CargaCSV {
             e.printStackTrace();
         }
     }*/
-    // Metodo auxiliar para extraer nombres
+    /*// Metodo auxiliar para extraer nombres
     private String extraerNombre(String texto, String campo) {
         int nameIdx = texto.indexOf(campo);
         int start = texto.indexOf("'", nameIdx + campo.length());
@@ -469,4 +470,5 @@ public class CargaCSV {
 
         return 1;
     }
+    */
 }

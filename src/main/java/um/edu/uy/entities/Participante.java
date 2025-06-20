@@ -19,7 +19,7 @@ public class Participante {
     public Participante(String nombreParticipante, String rol) {
         this.nombreParticipante = nombreParticipante;
         this.rol = rol;
-        this.peliculas = new Hash<>(100);
+        this.peliculas = new Hash<>();
     }
 
     public String getNombreParticipante() {
