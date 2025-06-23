@@ -66,4 +66,10 @@ public class Participante {
     public int hashCode() {
         return Objects.hash(nombreParticipante, rol);
     }
+
+    @Override
+    public String toString() {
+        return nombreParticipante + " (" + rol + ")";
+    }
+
 }

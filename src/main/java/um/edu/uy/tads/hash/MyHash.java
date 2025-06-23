@@ -1,6 +1,7 @@
 package um.edu.uy.tads.hash;
 
 
+import um.edu.uy.tads.List.MyList;
 import um.edu.uy.tads.hash.Exceptions.InvalidHashKey;
 
 public interface MyHash<K,T> {
@@ -23,5 +24,7 @@ public interface MyHash<K,T> {
     Node<K, T>[] getArray();
 
     boolean contains(K key);
+
+    MyList<T> getValues();
 
 }

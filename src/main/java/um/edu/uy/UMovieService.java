@@ -41,6 +41,56 @@ public class UMovieService {
         return calificaciones;
     }
 
+    public void agregarColeccion(Coleccion c) {
+        try {
+            colecciones.add(c.getIdColeccion(), c);
+        } catch (Exception e) {
+            System.out.println("Error al agregar coleccion: " + e.getMessage());
+        }
+    }
+
+    public Coleccion buscarColeccion(String idColeccion) {
+        try {
+            return colecciones.search(idColeccion);
+        } catch (InvalidHashKey e) {
+            return null; // si no existe esa clave en el hash
+        }
+    }
+
+    public void agregarPelicula(Pelicula p) {
+        peliculas.add(p.getIdPelicula(), p);
+    }
+
+    public MyList<Pelicula> getPeliculasComoLista() {
+        return peliculas.getValues();
+    }
+
+    public MyList<Coleccion> getColeccionesComoLista() {
+        return colecciones.getValues();
+    }
+
+    //dos nuevos
+    public Participante obtenerParticipante(String nombre, String rol) throws InvalidHashKey {
+        String clave = nombre + "-" + rol;
+        if (!participantes.contains(clave)) {
+            Participante nuevo = new Participante(nombre, rol);
+            participantes.add(clave, nuevo);
+        }
+        return participantes.search(clave);
+    }
+
+    public Pelicula searchOrNull(String id) {
+        try {
+            return peliculas.search(id);
+        } catch (InvalidHashKey e) {
+            return null;
+        }
+    }
+
+
+
+
+
     public void topPeliculasPorIdioma() {
         String[] idiomas = {"en", "fr", "it", "es", "pt"};
 

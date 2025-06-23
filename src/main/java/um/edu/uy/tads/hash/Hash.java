@@ -1,5 +1,7 @@
 package um.edu.uy.tads.hash;
 
+import um.edu.uy.tads.List.MyLinkedList;
+import um.edu.uy.tads.List.MyList;
 import um.edu.uy.tads.hash.Exceptions.InvalidHashKey;
 
 import java.util.Arrays;
@@ -172,6 +174,18 @@ public class Hash<K, T> implements MyHash<K, T> {
         }
         array[index] = new Node<>(key, value);
     }
+
+    @Override
+    public MyList<T> getValues() {
+        MyList<T> lista = new MyLinkedList<>();
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] != null) {
+                lista.add(array[i].getValue());
+            }
+        }
+        return lista;
+    }
+
 
 
 }

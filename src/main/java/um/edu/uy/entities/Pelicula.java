@@ -13,11 +13,12 @@ public class Pelicula implements Comparable<Pelicula>{
     private String tituloPelicula;
     private String idiomaOriginal;
     private double ingresos;
+
     private MyList<String> generos = new MyLinkedList<>();
     private MyHash<String,Participante> directores = new Hash<>();
-    private Coleccion coleccion;
-    private MyList<String> elenco = new MyLinkedList<>();
+    private MyList<Participante> elenco = new MyLinkedList<>();
     private MyList<Calificacion> calificaciones = new MyLinkedList<>();
+    private Coleccion coleccion;
 
     public Pelicula(String idPelicula, String tituloPelicula, String idiomaOriginal, double ingresos) {
         this.idPelicula = idPelicula;
@@ -77,13 +78,20 @@ public class Pelicula implements Comparable<Pelicula>{
         this.coleccion = coleccion;
     }
 
-    public MyList<String> getNombresActores() {
+    public MyList<Participante> getElenco() {
         return elenco;
     }
 
-    public void agregarNombreActor(String nombre) {
-        elenco.add(nombre);
+    public void agregarActor(Participante actor) {
+        // Evitar duplicados
+//        for (int i = 0; i < elenco.size(); i++) {
+//            if (elenco.get(i).equals(actor)) {
+//                return;
+//            }
+//        }
+        elenco.add(actor);
     }
+
     public void agregarCalificacion(Calificacion c) {
         this.calificaciones.add(c);
     }

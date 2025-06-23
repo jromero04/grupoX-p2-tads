@@ -72,5 +72,17 @@ public class Coleccion implements Comparable<Coleccion>{
         return Double.compare(otra.ingresosTotales, this.ingresosTotales); // orden descendente
     }
 
+
+    public double calcularIngresos() {
+        double total = 0;
+        for (int i =0; i< peliculas.size(); i++) {
+            Pelicula pelicula = peliculas.get(i);
+            total += pelicula.getIngresos();
+        }
+        return total;
+    }
+
+
+
     // recordar manejar en UMovieService que no haya colecciones con mismo id
 }

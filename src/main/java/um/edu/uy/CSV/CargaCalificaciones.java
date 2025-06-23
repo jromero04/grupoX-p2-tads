@@ -5,8 +5,7 @@ import um.edu.uy.entities.Calificacion;
 import um.edu.uy.entities.Pelicula;
 import um.edu.uy.entities.Usuario;
 import um.edu.uy.tads.hash.Exceptions.InvalidHashKey;
-import um.edu.uy.tads.hash.Hash;
-import um.edu.uy.tads.hash.MyHash;
+
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -17,82 +16,95 @@ import java.time.ZoneId;
 
 public class CargaCalificaciones {
 
-    public MyHash<String, Boolean> cargarCalificaciones(UMovieService servicio) {
+    public void cargarCalificaciones(UMovieService servicio) {
         String ruta = "ratings_1mm.csv";
         int cargadas = 0;
-        int noEncontrdas = 0;
+        int ignoradas = 0;
+        int otrasExcepciones = 0;
+        int parseoFallido = 0;
+        int noEncontradas = 0;
 
-
-        MyHash<String, Boolean> peliculasConCalificacion = new Hash<>(); // clave = idPelicula
+        long inicio = System.currentTimeMillis();
 
         try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
-            String cabecera = br.readLine();
+            String cabecera = br.readLine(); // ignorar la cabecera
 
             String linea;
             while ((linea = br.readLine()) != null) {
                 String[] partes = linea.split(",");
 
-                if (partes.length < 4) continue;
-
-                String idUsuario = partes[0].trim();
-                String idPelicula = partes[1].trim();
-                String ratingStr = partes[2].trim();
-                String timeStr = partes[3].trim();
-
-                if (idUsuario.isEmpty() || idPelicula.isEmpty() || ratingStr.isEmpty() || timeStr.isEmpty()) continue;
-
-                double puntaje;
-                long timestamp;
-                try {
-                    puntaje = Double.parseDouble(ratingStr);
-                    timestamp = Long.parseLong(timeStr);
-                } catch (NumberFormatException e) {
-                    System.out.println("Error al parsear puntaje o timestamp: " + e.getMessage());
+                if (partes.length < 4) {
+                    ignoradas++;
                     continue;
                 }
 
-                //Convierto a LocalDateTime
-                LocalDateTime fecha = Instant.ofEpochSecond(timestamp).atZone(ZoneId.systemDefault()).toLocalDateTime();
-
-
-                // Marcar la película como vista
-                peliculasConCalificacion.add(idPelicula, true);
-
-                // Obtener o crear el usuario
-                Usuario usuario;
                 try {
-                    usuario = servicio.getUsuarios().search(idUsuario);
-                } catch (InvalidHashKey e) {
-                    usuario = new Usuario(idUsuario);
-                    servicio.getUsuarios().add(idUsuario, usuario);
-                }
+                    String idUsuario = partes[0].trim();
+                    String idPelicula = partes[1].trim();
+                    String ratingStr = partes[2].trim();
+                    String timestampStr = partes[3].trim();
 
-                //Obtener la pelicula
-                Pelicula pelicula;
-                try {
-                    pelicula = servicio.getPeliculas().search(idPelicula);
-                } catch (InvalidHashKey ex) {
-                    //System.out.println("Pelicula no encontrada: " + idPelicula);
-                    noEncontrdas++;
-                    continue;
-                }
-                // Crear y asignar calificación
-                Calificacion calificacion = new Calificacion(usuario, pelicula, puntaje, fecha);
-                usuario.agregarCalificacion(calificacion);
-                pelicula.agregarCalificacion(calificacion);
-                servicio.getCalificaciones().add(calificacion);
 
-                cargadas++;
+                    // Validar existencia de película
+                    Pelicula pelicula;
+                    try {
+                        pelicula = servicio.getPeliculas().search(idPelicula);
+                    } catch (InvalidHashKey e) {
+                        ignoradas++;
+                        noEncontradas++;
+                        if (ignoradas <= 40) {
+                            System.out.println("Película no encontrada: " + idPelicula);
+                        }
+                        continue;
+                    }
+
+                    // Obtener o crear usuario
+                    Usuario usuario;
+                    try {
+                        usuario = servicio.getUsuarios().search(idUsuario);
+                    } catch (InvalidHashKey e) {
+                        usuario = new Usuario(idUsuario);
+                        servicio.getUsuarios().add(idUsuario, usuario);
+                    }
+
+                    // Parseo de datos
+                    double puntaje;
+                    long segundos;
+                    try {
+                        puntaje = Double.parseDouble(ratingStr);
+                        segundos = Long.parseLong(timestampStr);
+                    } catch (Exception e) {
+                        parseoFallido++;
+                        ignoradas++;
+                        continue;
+                    }
+
+                    LocalDateTime fecha = LocalDateTime.ofInstant(Instant.ofEpochSecond(segundos), ZoneId.systemDefault());
+
+                    // Crear y guardar calificación
+                    Calificacion c = new Calificacion(usuario, pelicula, puntaje, fecha);
+                    servicio.getCalificaciones().add(c);
+                    pelicula.agregarCalificacion(c);
+                    cargadas++;
+
+                } catch (Exception e) {
+                    otrasExcepciones++;
+                    ignoradas++;
+                }
             }
-
-            System.out.println("Calificaciones cargadas: " + cargadas);
-            System.out.println("Total de peliculas no encontradas: " + noEncontrdas);
-
         } catch (IOException e) {
-            System.out.println("Error leyendo ratings_1mm.csv");
-            e.printStackTrace();
+            System.out.println("Error al leer el archivo: " + e.getMessage());
+            return;
         }
 
-        return peliculasConCalificacion;
+        long fin = System.currentTimeMillis();
+        System.out.println("Calificaciones cargadas: " + cargadas);
+        System.out.println("Calificaciones ignoradas: " + ignoradas);
+        System.out.println("  - Películas no encontradas: " + noEncontradas);
+        System.out.println("  - Fallos de rating o timestamp: " + parseoFallido);
+        System.out.println("  - Mal formateadas u otras: " + otrasExcepciones);
+
     }
+
+
 }
