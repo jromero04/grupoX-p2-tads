@@ -186,6 +186,17 @@ public class Hash<K, T> implements MyHash<K, T> {
         return lista;
     }
 
+    @Override
+    public MyList<K> keys() {
+        MyList<K> listaClaves = new MyLinkedList<>();
+        for (Node<K, T> nodo : array) {
+            if (nodo != null) {
+                listaClaves.add(nodo.getKey());
+            }
+        }
+        return listaClaves;
+    }
+
 
 
 }

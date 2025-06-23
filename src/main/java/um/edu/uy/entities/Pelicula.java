@@ -84,11 +84,11 @@ public class Pelicula implements Comparable<Pelicula>{
 
     public void agregarActor(Participante actor) {
         // Evitar duplicados
-//        for (int i = 0; i < elenco.size(); i++) {
-//            if (elenco.get(i).equals(actor)) {
-//                return;
-//            }
-//        }
+        for (int i = 0; i < elenco.size(); i++) {
+            if (elenco.get(i).equals(actor)) {
+                return;
+            }
+        }
         elenco.add(actor);
     }
 

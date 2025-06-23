@@ -27,4 +27,6 @@ public interface MyHash<K,T> {
 
     MyList<T> getValues();
 
+    MyList<K> keys();
+
 }

@@ -56,9 +56,6 @@ public class CargaPeliculas {
 
                     if (idStr.isEmpty() || titulo.isEmpty() || idioma.isEmpty()) {
                         ignoradas++;
-                        /*System.out.println("Línea ignorada por campos vacíos:");
-                        System.out.println("ID: " + idStr + " | Título: " + titulo + " | Idioma: " + idioma);
-                        System.out.println(linea);*/
                         continue;
                     }
 
@@ -67,14 +64,20 @@ public class CargaPeliculas {
 
                     Pelicula pelicula = new Pelicula(idStr, titulo, idioma, ingresos);
 
+
                     // Cargar géneros
+                    generosStr = generosStr.replaceAll("^\"|\"$", ""); // limpia comillas dobles
                     if (!generosStr.isEmpty() && generosStr.startsWith("[")) {
-                        Pattern patternGenero = Pattern.compile("\\{'id': \\d+, 'name': '([^']+)'\\}");
+                        Pattern patternGenero = Pattern.compile("'name': '([^']+)'");
                         Matcher matcherGenero = patternGenero.matcher(generosStr);
                         while (matcherGenero.find()) {
-                            pelicula.agregarGenero(matcherGenero.group(1));
+                            String genero = matcherGenero.group(1);
+                            pelicula.agregarGenero(genero);
                         }
+                    } else {
+                        System.out.println("No se pudo procesar géneros para: " + titulo + " -> " + generosStr);
                     }
+
 
 
                     // Cargar colección
@@ -114,10 +117,7 @@ public class CargaPeliculas {
                     cargadas++;
                 } catch (Exception e) {
                     ignoradas++;
-                    /*System.out.println("--- Error en línea:");
-                    System.out.println(linea);
-                    System.out.println("Motivo: " + e.getMessage());
-                    System.out.println();*/
+
                 }
             }
         } catch (IOException e) {

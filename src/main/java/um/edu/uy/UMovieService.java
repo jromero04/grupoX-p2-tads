@@ -335,10 +335,26 @@ public class UMovieService {
             }
             System.out.println();
 
+            // Imprimir directores
+            System.out.println("Directores:");
+            Node<String, Participante>[] nodosDirectores = p.getDirectores().getArray();
+            for (Node<String, Participante> nodo : nodosDirectores) {
+                if (nodo != null) {
+                    Participante director = nodo.getValue();
+                    System.out.println("- " + director.getNombreParticipante() + " (" + director.getRol() + ")");
+                }
+            }
+
+            // Imprimir elenco
+            System.out.println("Elenco:");
+            for (int i = 0; i < p.getElenco().size(); i++) {
+                Participante actor = p.getElenco().get(i);
+                System.out.println("- " + actor.getNombreParticipante() + " (" + actor.getRol() + ")");
+            }
             Coleccion c = p.getColeccion();
             if (c != null) {
                 System.out.println("Colección: " + c.getTituloColeccion());
-                System.out.printf("Ingresos totales de la colección: %,.2f\n", c.getIngresosTotales());
+                System.out.printf("Ingresos totales de la colección: %,.2f\n", c.calcularIngresos());
                 System.out.println("Películas en la colección:");
                 for (int i = 0; i < c.getPeliculas().size(); i++) {
                     Pelicula peli = c.getPeliculas().get(i);
@@ -366,6 +382,26 @@ public class UMovieService {
             }
         }
     }
+
+    public void imprimirPeliculasDeParticipante(String nombre, String rol) {
+        String clave = nombre + "-" + rol;
+        try {
+            Participante p = this.participantes.search(clave);
+            System.out.println("Participante: " + p.getNombreParticipante() + " (" + p.getRol() + ")");
+            System.out.println("Películas en las que participó:");
+
+            MyList<String> clavesPeliculas = p.getPeliculas().keys();
+            for (int i = 0; i < clavesPeliculas.size(); i++) {
+                String clavePelicula = clavesPeliculas.get(i);
+                Pelicula peli = p.getPeliculas().search(clavePelicula);
+                System.out.println("- " + peli.getTituloPelicula() + " (ID: " + peli.getIdPelicula() + ")");
+            }
+        } catch (Exception e) {
+            System.out.println("No se encontró al participante: " + nombre + " con rol: " + rol);
+        }
+    }
+
+
 }
 
 

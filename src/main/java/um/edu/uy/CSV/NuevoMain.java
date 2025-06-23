@@ -32,9 +32,12 @@ public class NuevoMain {
             switch (opcion) {
                 case "1":
                     carga.cargarPeliculas(servicio);
-                    cargaCreditos.cargarCreditos(servicio);
+                    //cargaCreditos.cargarCreditos(servicio);
                     //cargaCalificaciones.cargarCalificaciones(servicio);
-                    System.out.println("Sin cal");
+                    //System.out.println("Elenco de cierta pelicula: ");
+                    //System.out.println("Peliculas de Tom hanks");
+                    //servicio.imprimirPeliculasDeParticipante("Tom Hanks", "Actor");
+                    servicio.imprimirInfoPelicula("862");
                     break;
 
                 case "2":
@@ -60,6 +63,7 @@ public class NuevoMain {
                         System.out.println("   Ingresos: $" + p.getIngresos());
                         System.out.println("   Colección: " + (p.getColeccion() != null ? p.getColeccion().getTituloColeccion() : "ninguna"));
                         System.out.println("   Elenco: " + p.getElenco());
+                        System.out.println("   Cant. calificaciones: " + p.getCantidadDeCalificaciones());
                         System.out.println();
                     }
                     break;
