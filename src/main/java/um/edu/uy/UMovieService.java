@@ -10,6 +10,7 @@ import um.edu.uy.tads.hash.Node;
 import um.edu.uy.tads.heap.ArrayHeap;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class UMovieService {
@@ -147,9 +148,12 @@ public class UMovieService {
         ArrayHeap<Consulta2> promedioAuxiliar = new ArrayHeap<>(arreglo.length, true); //use length arreglo como capacidad del heap para que no sea fijo y dependa de la cant de datos
         for (Node<String, Pelicula> nodo : arreglo) {
             if (nodo != null) {
-                Pelicula p = nodo.getValue();
-                Consulta2 promedio = new Consulta2(p.getIdPelicula(), p.getTituloPelicula(), p.getPromedioCalificaciones());
-                promedioAuxiliar.insert(promedio);
+                if (nodo.getValue().getCantidadDeCalificaciones() > 100){
+                    Pelicula p = nodo.getValue();
+                    Consulta2 promedio = new Consulta2(p.getIdPelicula(), p.getTituloPelicula(), p.getPromedioCalificaciones());
+                    promedioAuxiliar.insert(promedio);
+                }
+
             }
         }
 
@@ -157,7 +161,7 @@ public class UMovieService {
             Consulta2 p = promedioAuxiliar.delete();
             System.out.println(p.getIdPelicula() + ", " + p.getTituloPelicula() + ", " + p.getCalificacionPromedio());
         }
-        System.out.println();
+
     }
 
 
@@ -173,7 +177,10 @@ public class UMovieService {
         }
 
         //hice este heap nuevo porque queria que solo mantenga el top5 (no encontre otra forma de borrar las que no quiero sin borrar el top
-        ArrayHeap<Consulta3> ingresosTop = new ArrayHeap<>(arreglo.length, true); //use length arreglo como capacidad del heap para que no sea fijo y dependa de la cant de datos
+
+        //es mejor hacer minheap sin necesidad de crear un nuevo heap? el top 5 va a devolverse de menor a mayor
+
+        ArrayHeap<Consulta3> ingresosTop = new ArrayHeap<>(1000, true); //use length arreglo como capacidad del heap para que no sea fijo y dependa de la cant de datos
 
         for (int i = 0; i < 5 && ingresosSagaAuxiliar.size() > 0; i++) {
             Consulta3 c = ingresosSagaAuxiliar.delete();
@@ -193,7 +200,7 @@ public class UMovieService {
             try {
                 coleccion = colecciones.search(idColeccion);
             } catch (InvalidHashKey e) {
-                System.out.println("ID de colección no encontrado: " + idColeccion);  //este print no se si esta bien
+                                                     //no es necesario hacer print si entra en el catch
             }
             if (coleccion != null) {
 
@@ -207,13 +214,110 @@ public class UMovieService {
 
                 c.setIdPeliculas(idsPeliculas);
                 c.setCantidadPeliculas(idsPeliculas.size());
+            }
 
+        }
+        for (int coleccionIngreso = 1; coleccionIngreso <= ingresosTop.size(); coleccionIngreso++) {
+            System.out.println("Id colección: " + ingresosTop.get(coleccionIngreso).getIdColeccion() + ", Título colección: " + ingresosTop.get(coleccionIngreso).getTituloColeccion() + ", Cantidad de películas: " + ingresosTop.get(coleccionIngreso).getCantidadPeliculas() + ", Ids películas: " + ingresosTop.get(coleccionIngreso).getIdPeliculas() + "Ingresos Generados: " + ingresosTop.get(coleccionIngreso).getIngresosTotales());
+        }
+    }
+
+
+
+
+    public void topUsuariosGeneros(MyList<Calificacion> calificaciones ){
+        Hash<String, Integer> visualizacionesGeneros = new Hash<String, Integer>(1000);
+
+        for(int i=0; i < calificaciones.size(); i++){
+            MyList<String> generos = calificaciones.get(i).getPelicula().getGeneros();
+            for(int j=0; j < generos.size(); j++){
+
+                Integer cantidadVistas = null;
+
+                try {
+                    cantidadVistas = visualizacionesGeneros.search(generos.get(j));
+
+                } catch (InvalidHashKey e) {
+
+                }
+
+                if (cantidadVistas != null) {
+                    try {
+                        visualizacionesGeneros.replace(generos.get(j), cantidadVistas + 1);
+                    } catch (InvalidHashKey e) {
+
+                    }
+                }
+                else{
+                    visualizacionesGeneros.add(generos.get(j), 1);
+                }
 
             }
 
         }
-    }
 
+        Node<String, Integer>[] arreglo = visualizacionesGeneros.getArray();
+        ArrayHeap<Consulta6> calificacionesAuxiliar = new ArrayHeap<>(1000, false); //lo creo como min heap xq me ahorra tener que crear otro heap para eliminar los elementos que no quiero
+        for (Node<String, Integer> nodo : arreglo) {
+            if (nodo != null) {
+                Consulta6 consulta6 = new Consulta6(nodo.getKey(), nodo.getValue());
+                calificacionesAuxiliar.insert(consulta6);
+            }
+        }
+        // aca tengo el heap ordenado por genero con mas calificaciones
+
+
+        for (int i = 0; i < calificacionesAuxiliar.size() - 10; i++) {               //este for me deja el top10
+            calificacionesAuxiliar.delete();
+        }
+
+        for (int i = 1; i <= calificacionesAuxiliar.size(); i++) {
+            Consulta6 c = calificacionesAuxiliar.get(i);                    // este c es un objeto de tipo consulta 6 a los que le hago los set
+
+            Hash<String, Integer> usuariosGeneros = new Hash<String, Integer>(1000);
+
+            String claveGenero = c.getGenero();
+            for (int calificacionesLista = 0; calificacionesLista < calificaciones.size(); calificacionesLista++){
+                String usuario = calificaciones.get(calificacionesLista).getUsuario().getIdUsuario();
+                if (calificaciones.get(calificacionesLista).getPelicula().getGeneros().getValue(claveGenero) != null){
+
+                    Integer cantidadCalificacionesUsuario = null;
+
+                    try{
+                        cantidadCalificacionesUsuario = usuariosGeneros.search(usuario);
+                    } catch (InvalidHashKey e) {
+                    }
+                    if (cantidadCalificacionesUsuario != null) {
+                        try {
+                            usuariosGeneros.replace(usuario, cantidadCalificacionesUsuario + 1);
+                        } catch (InvalidHashKey e) {
+                        }
+                    }
+                    else{
+                        usuariosGeneros.add(usuario, 1);
+                    }
+                }
+
+            }
+            Node<String, Integer>[] arregloUsuarios = usuariosGeneros.getArray();
+            String usuarioTop = null;
+            Integer cantidadTop = 0;
+            for (Node<String, Integer> nodoArregloUsuarios : arregloUsuarios){
+                if (nodoArregloUsuarios.getValue() > cantidadTop){
+                    usuarioTop = nodoArregloUsuarios.getKey();
+                    cantidadTop = nodoArregloUsuarios.getValue();
+                }
+            }
+
+            c.setIdUsuario(usuarioTop);
+            c.setCantidadEvaluacionesUsuarioTop(cantidadTop);
+        }
+
+        for (int generoTopUsuario = 1; generoTopUsuario <= calificacionesAuxiliar.size(); generoTopUsuario++){
+            System.out.println("Id usuario: " + calificacionesAuxiliar.get(generoTopUsuario).getIdusuario() + ", Género" + calificacionesAuxiliar.get(generoTopUsuario).getGenero() + ", Cantidad de evaluaciones " + calificacionesAuxiliar.get(generoTopUsuario).getCantidadEvaluacionesUsuarioTop());
+        }
+
+    }
 
 
 

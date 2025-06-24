@@ -30,7 +30,16 @@ public class Consulta3 implements Comparable<Consulta3>{
 
     public String getIdColeccion(){return idColeccion;}
 
+    public String getTituloColeccion(){return tituloColeccion;}
+
+    public int getCantidadPeliculas(){return cantidadPeliculas;}
+
+    public MyList<String> getIdPeliculas(){return idPeliculas;}
+
     public double getIngresosTotales(){return ingresosTotales;}
+
+
+
 
     public void setCantidadPeliculas(int cantidadPeliculas) {
         this.cantidadPeliculas = cantidadPeliculas;
@@ -54,56 +63,6 @@ public class Consulta3 implements Comparable<Consulta3>{
 
 //primero ordenar el heap original de coleccion y despues sacar los primeros 5
 
-public void ingresosSaga (MyHash<String, Coleccion> colecciones) {
-    Node<String, Coleccion>[] arreglo = colecciones.getArray();
-    ArrayHeap<Consulta3> ingresosSagaAuxiliar = new ArrayHeap<>(arreglo.length, true); //use length arreglo como capacidad del heap para que no sea fijo y dependa de la cant de datos
-    for (Node<String, Coleccion> nodo : arreglo) {
-        if (nodo != null) {
-            Coleccion c = nodo.getValue();
-            Consulta3 consultaColeccion = new Consulta3(c.getIdColeccion(), c.getTituloColeccion(), c.getIngresosTotales());
-            ingresosSagaAuxiliar.insert(consultaColeccion);
-        }
-    }
 
-    //hice este heap nuevo porque queria que solo mantenga el top5 (no encontre otra forma de borrar las que no quiero sin borrar el top
-    ArrayHeap<Consulta3> ingresosTop = new ArrayHeap<>(arreglo.length, true); //use length arreglo como capacidad del heap para que no sea fijo y dependa de la cant de datos
-
-    for (int i = 0; i < 5 && ingresosSagaAuxiliar.size() > 0; i++) {
-        Consulta3 c = ingresosSagaAuxiliar.delete();
-        ingresosTop.insert(c);
-        //este c cambiar el nombre (esta mal?)
-    }
-    //en este punto tengo el heap ingresostop con las 5 colecciones top
-
-    //ahora quiero recorrer este heap para hallar el idpeliculas
-
-    for (int i = 1; i <= ingresosTop.size(); i++) {
-        Consulta3 c = ingresosTop.get(i);     //cree un metodo get en heap
-        String idColeccion = c.getIdColeccion();
-
-        Coleccion coleccion = null;          //sin esta linea no me reconoce el coleccion mas abajo
-
-        try {
-            coleccion = colecciones.search(idColeccion);
-        } catch (InvalidHashKey e) {
-            System.out.println("ID de colección no encontrado: " + idColeccion);  //este print no se si esta bien
-        }
-        if (coleccion != null){
-
-            MyList<String> idsPeliculas = new MyLinkedList<>(); // lista vacía para meter los id
-
-            MyList<Pelicula> peliculas = coleccion.getPeliculas();
-            for (int iteracion = 0; iteracion < peliculas.size(); i++) {         //cambiar nombre iteracion
-                Pelicula p = peliculas.get(iteracion);
-                idsPeliculas.add(p.getIdPelicula());
-            }
-
-        c.setIdPeliculas(idsPeliculas);
-        c.setCantidadPeliculas(idsPeliculas.size());
-
-
-        }
-
-    }
 
 }}
