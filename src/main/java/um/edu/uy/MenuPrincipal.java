@@ -8,7 +8,7 @@ import um.edu.uy.tads.hash.Exceptions.InvalidHashKey;
 
 import java.util.Scanner;
 
-public class NuevoMain {
+public class MenuPrincipal {
     public static void main(String[] args) throws InvalidHashKey {
         UMovieService servicio = new UMovieService();
         CargaPeliculas carga = new CargaPeliculas();

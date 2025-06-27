@@ -60,8 +60,6 @@ public class Coleccion implements Comparable<Coleccion>{
         }
         if (!yaRegistrada){
             this.peliculas.add(nuevaPelicula);
-        } else {
-            System.out.println("La pelicula con id: " + nuevaPelicula.getIdPelicula() + "ya esta registrada en la coleccion (" + tituloColeccion +")");
         }
     }
 

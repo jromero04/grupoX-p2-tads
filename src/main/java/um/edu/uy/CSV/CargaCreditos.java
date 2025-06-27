@@ -17,8 +17,6 @@ public class CargaCreditos {
         String ruta = "credits.csv";
         int[] noEncontradas = {0};
 
-        long inicio = System.currentTimeMillis();
-
         try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
             List<String> lineas = br.lines().skip(1).toList();
 
@@ -26,10 +24,6 @@ public class CargaCreditos {
                     .mapToInt(linea -> procesarLineaCredito(linea, servicio, noEncontradas))
                     .sum();
 
-            long fin = System.currentTimeMillis();
-            System.out.println("Créditos procesados: " + procesadas);
-            System.out.println("Películas no encontradas: " + noEncontradas[0]);
-            System.out.println("Tiempo de carga de créditos: " + (fin - inicio) + " ms");
         } catch (Exception e) {
             System.out.println("Error leyendo archivo credits: " + e.getMessage());
         }
