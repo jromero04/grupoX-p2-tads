@@ -1,12 +1,12 @@
-package um.edu.uy.Consultas;
+package um.edu.uy.AuxiliaresConsulta;
 
-public class Consulta6 implements Comparable<Consulta6> {
+public class TopUsuarioGenero implements Comparable<TopUsuarioGenero> {
     private String genero;
     private int cantidadEvaluaciones;
     private int cantidadEvaluacionesUsuarioTop;
     private String idUsuario;
 
-    public Consulta6(String genero,int cantidadEvaluaciones) {
+    public TopUsuarioGenero(String genero, int cantidadEvaluaciones) {
         this.genero = genero;
         this.cantidadEvaluaciones = cantidadEvaluaciones;
     }
@@ -38,7 +38,7 @@ public class Consulta6 implements Comparable<Consulta6> {
 
 
 
-    public int compareTo(Consulta6 otra) {
+    public int compareTo(TopUsuarioGenero otra) {
         return Double.compare(this.getCantidadEvaluaciones(), otra.getCantidadEvaluaciones());
     }
 

@@ -1,8 +1,8 @@
 package um.edu.uy;
 
-import um.edu.uy.Consultas.Consulta3;
-import um.edu.uy.Consultas.Consulta6;
-import um.edu.uy.Consultas.Top10PeliculasMejorCalificacion;
+import um.edu.uy.AuxiliaresConsulta.IngresosColecciones;
+import um.edu.uy.AuxiliaresConsulta.TopUsuarioGenero;
+import um.edu.uy.AuxiliaresConsulta.ClasificacionesPeliculas;
 import um.edu.uy.entities.*;
 import um.edu.uy.tads.List.MyLinkedList;
 import um.edu.uy.tads.List.MyList;
@@ -140,34 +140,32 @@ public class UMovieService {
 
 
     public void mejorCalificacion(MyHash<String, Pelicula> peliculas) {
-        Node<String, Pelicula>[] arreglo = peliculas.getArray();
-        ArrayHeap<Top10PeliculasMejorCalificacion> promedioAuxiliar = new ArrayHeap<>(arreglo.length, true); //use length arreglo como capacidad del heap para que no sea fijo y dependa de la cant de datos
-        for (Node<String, Pelicula> nodo : arreglo) {
+        Node<String, Pelicula>[] arregloPeliculas = peliculas.getArray();
+        ArrayHeap<ClasificacionesPeliculas> promedioAuxiliar = new ArrayHeap<>(arregloPeliculas.length, true); //use length arreglo como capacidad del heap para que no sea fijo y dependa de la cant de datos
+        for (Node<String, Pelicula> nodo : arregloPeliculas) {
             if (nodo != null) {
                 if (nodo.getValue().getCantidadDeCalificaciones() > 100){
                     Pelicula p = nodo.getValue();
-                    Top10PeliculasMejorCalificacion promedio = new Top10PeliculasMejorCalificacion(p.getIdPelicula(), p.getTituloPelicula(), p.getPromedioCalificaciones());
+                    ClasificacionesPeliculas promedio = new ClasificacionesPeliculas(p.getIdPelicula(), p.getTituloPelicula(), p.getPromedioCalificaciones());
                     promedioAuxiliar.insert(promedio);
                 }
-
             }
         }
 
         for (int i = 0; i < 10 && promedioAuxiliar.size() > 0; i++) {
-            Top10PeliculasMejorCalificacion p = promedioAuxiliar.delete();
+            ClasificacionesPeliculas p = promedioAuxiliar.delete();
             System.out.println(p.getIdPelicula() + ", " + p.getTituloPelicula() + ", " + p.getCalificacionPromedio());
         }
-
     }
 
 
     public void ingresosSaga (MyHash<String, Coleccion> colecciones) {
         Node<String, Coleccion>[] arreglo = colecciones.getArray();
-        ArrayHeap<Consulta3> ingresosSagaAuxiliar = new ArrayHeap<>(arreglo.length, true); //use length arreglo como capacidad del heap para que no sea fijo y dependa de la cant de datos
+        ArrayHeap<IngresosColecciones> ingresosSagaAuxiliar = new ArrayHeap<>(arreglo.length, true); //use length arreglo como capacidad del heap para que no sea fijo y dependa de la cant de datos
         for (Node<String, Coleccion> nodo : arreglo) {
             if (nodo != null) {
                 Coleccion c = nodo.getValue();
-                Consulta3 consultaColeccion = new Consulta3(c.getIdColeccion(), c.getTituloColeccion(), c.getIngresosTotales());
+                IngresosColecciones consultaColeccion = new IngresosColecciones(c.getIdColeccion(), c.getTituloColeccion(), c.getIngresosTotales());
                 ingresosSagaAuxiliar.insert(consultaColeccion);
             }
         }
@@ -176,10 +174,10 @@ public class UMovieService {
 
         //es mejor hacer minheap sin necesidad de crear un nuevo heap? el top 5 va a devolverse de menor a mayor
 
-        ArrayHeap<Consulta3> ingresosTop = new ArrayHeap<>(1000, true); //use length arreglo como capacidad del heap para que no sea fijo y dependa de la cant de datos
+        ArrayHeap<IngresosColecciones> ingresosTop = new ArrayHeap<>(1000, true); //use length arreglo como capacidad del heap para que no sea fijo y dependa de la cant de datos
 
         for (int i = 0; i < 5 && ingresosSagaAuxiliar.size() > 0; i++) {
-            Consulta3 c = ingresosSagaAuxiliar.delete();
+            IngresosColecciones c = ingresosSagaAuxiliar.delete();
             ingresosTop.insert(c);
             //este c cambiar el nombre (esta mal?)
         }
@@ -188,7 +186,7 @@ public class UMovieService {
         //ahora quiero recorrer este heap para hallar el idpeliculas
 
         for (int i = 1; i <= ingresosTop.size(); i++) {
-            Consulta3 c = ingresosTop.get(i);     //cree un metodo get en heap
+            IngresosColecciones c = ingresosTop.get(i);     //cree un metodo get en heap
             String idColeccion = c.getIdColeccion();
 
             Coleccion coleccion = null;          //sin esta linea no me reconoce el coleccion mas abajo
@@ -253,10 +251,10 @@ public class UMovieService {
         }
 
         Node<String, Integer>[] arreglo = visualizacionesGeneros.getArray();
-        ArrayHeap<Consulta6> calificacionesAuxiliar = new ArrayHeap<>(1000, false); //lo creo como min heap xq me ahorra tener que crear otro heap para eliminar los elementos que no quiero
+        ArrayHeap<TopUsuarioGenero> calificacionesAuxiliar = new ArrayHeap<>(1000, false); //lo creo como min heap xq me ahorra tener que crear otro heap para eliminar los elementos que no quiero
         for (Node<String, Integer> nodo : arreglo) {
             if (nodo != null) {
-                Consulta6 consulta6 = new Consulta6(nodo.getKey(), nodo.getValue());
+                TopUsuarioGenero consulta6 = new TopUsuarioGenero(nodo.getKey(), nodo.getValue());
                 calificacionesAuxiliar.insert(consulta6);
             }
         }
@@ -268,7 +266,7 @@ public class UMovieService {
         }
 
         for (int i = 1; i <= calificacionesAuxiliar.size(); i++) {
-            Consulta6 c = calificacionesAuxiliar.get(i);                    // este c es un objeto de tipo consulta 6 a los que le hago los set
+            TopUsuarioGenero c = calificacionesAuxiliar.get(i);                    // este c es un objeto de tipo consulta 6 a los que le hago los set
 
             Hash<String, Integer> usuariosGeneros = new Hash<String, Integer>();
 

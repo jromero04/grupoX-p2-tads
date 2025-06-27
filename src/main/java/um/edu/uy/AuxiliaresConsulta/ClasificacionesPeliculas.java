@@ -1,16 +1,12 @@
-package um.edu.uy.Consultas;
-
-//metodo que vacie heap con peliculas luego de calcular todo, fijate si esta en tad
-
-//cambiar nombre de consulta2
+package um.edu.uy.AuxiliaresConsulta;
 
 
-public class Top10PeliculasMejorCalificacion implements Comparable<Top10PeliculasMejorCalificacion>{
+public class ClasificacionesPeliculas implements Comparable<ClasificacionesPeliculas>{
     private String idPelicula;
     private String tituloPelicula;
     private double calificacionPromedio;
 
-    public Top10PeliculasMejorCalificacion(String IdPelicula, String tituloPelicula, double calificacionMedia){
+    public ClasificacionesPeliculas(String IdPelicula, String tituloPelicula, double calificacionMedia){
         this.idPelicula = idPelicula;
         this.tituloPelicula = tituloPelicula;
         this.calificacionPromedio = calificacionMedia;
@@ -35,7 +31,7 @@ public class Top10PeliculasMejorCalificacion implements Comparable<Top10Pelicula
     }
 
     @Override
-    public int compareTo(Top10PeliculasMejorCalificacion otra) {
-        return Double.compare(this.getCalificacionPromedio(), otra.getCalificacionPromedio());
+    public int compareTo(ClasificacionesPeliculas peliculaComparada) {
+        return Double.compare(this.getCalificacionPromedio(), peliculaComparada.getCalificacionPromedio());
     }
 }
