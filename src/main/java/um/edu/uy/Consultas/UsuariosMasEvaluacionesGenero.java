@@ -19,6 +19,8 @@ public class UsuariosMasEvaluacionesGenero {
 
 
     public void topUsuariosGeneros(MyList<Calificacion> calificaciones ){
+        long inicio = System.currentTimeMillis(); // Inicio del tiempo de ejecución
+
         Hash<String, Integer> visualizacionesGeneros = new Hash<String, Integer>();
 
         for(int elementoCalificaciones = 0; elementoCalificaciones < calificaciones.size(); elementoCalificaciones++){
@@ -107,5 +109,9 @@ public class UsuariosMasEvaluacionesGenero {
         for (int generoTopUsuario = 1; generoTopUsuario <= calificacionesAuxiliar.size(); generoTopUsuario++){
             System.out.println("Id usuario: " + calificacionesAuxiliar.get(generoTopUsuario).getIdusuario() + ", Género" + calificacionesAuxiliar.get(generoTopUsuario).getGenero() + ", Cantidad de evaluaciones " + calificacionesAuxiliar.get(generoTopUsuario).getCantidadEvaluacionesUsuarioTop());
         }
+
+        long fin = System.currentTimeMillis(); // Fin del tiempo de ejecución
+        System.out.println("Tiempo de ejecución de la consulta: " + (fin - inicio) + " ms");
+
     }
 }

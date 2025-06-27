@@ -16,6 +16,8 @@ public class PeliculasMejorCalificacionMedia {
     }
 
     public void mejorCalificacion(MyHash<String, Pelicula> peliculas) {
+        long inicio = System.currentTimeMillis(); // Inicio del tiempo de ejecución
+
         Node<String, Pelicula>[] arregloPeliculas = peliculas.getArray();
         ArrayHeap<ClasificacionesPeliculas> heapPeliculasClasificacion = new ArrayHeap<>(1000, true);
         for (Node<String, Pelicula> nodoPelicula : arregloPeliculas) {
@@ -31,5 +33,9 @@ public class PeliculasMejorCalificacionMedia {
             ClasificacionesPeliculas peliculaTop = heapPeliculasClasificacion.delete();
             System.out.println(peliculaTop.getIdPelicula() + ", " + peliculaTop.getTituloPelicula() + ", " + peliculaTop.getCalificacionPromedio());
         }
+
+        long fin = System.currentTimeMillis(); // Fin del tiempo de ejecución
+        System.out.println("Tiempo de ejecución de la consulta: " + (fin - inicio) + " ms");
+
     }
 }

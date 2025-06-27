@@ -20,6 +20,8 @@ public class ColeccionesConMasIngresos {
     }
 
     public void ingresosSaga (MyHash<String, Coleccion> colecciones) {
+        long inicio = System.currentTimeMillis();
+
         Node<String, Coleccion>[] arregloColecciones = colecciones.getArray();
         ArrayHeap<IngresosColecciones> heapIngresosSaga = new ArrayHeap<>(1000, true);
 
@@ -66,6 +68,10 @@ public class ColeccionesConMasIngresos {
         for (int coleccionIngreso = 1; coleccionIngreso <= ingresosTop.size(); coleccionIngreso++) {
             System.out.println("Id colección: " + ingresosTop.get(coleccionIngreso).getIdColeccion() + ", Título colección: " + ingresosTop.get(coleccionIngreso).getTituloColeccion() + ", Cantidad de películas: " + ingresosTop.get(coleccionIngreso).getCantidadPeliculas() + ", Ids películas: " + ingresosTop.get(coleccionIngreso).getIdPeliculas() + "Ingresos Generados: " + ingresosTop.get(coleccionIngreso).getIngresosTotales());
         }
+
+        long fin = System.currentTimeMillis(); // Fin del tiempo de ejecución
+        System.out.println("Tiempo de ejecución de la consulta: " + (fin - inicio) + " ms");
+
     }
 
 

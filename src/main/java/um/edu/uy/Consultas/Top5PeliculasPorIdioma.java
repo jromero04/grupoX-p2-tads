@@ -19,6 +19,9 @@ public class Top5PeliculasPorIdioma {
     }
 
     public void topPeliculasPorIdioma() {
+
+        long inicio = System.currentTimeMillis();
+
         String[] idiomas = {"en", "fr", "it", "es", "pt"};
 
         for (String idioma : idiomas) {
@@ -31,6 +34,9 @@ public class Top5PeliculasPorIdioma {
             }
             System.out.println();
         }
+
+        long fin = System.currentTimeMillis(); // Fin del tiempo de ejecución
+        System.out.println("Tiempo de ejecución de la consulta: " + (fin - inicio) + " ms");
     }
 
     private ArrayHeap<Pelicula> construirHeapPorIdioma(String idioma) {
