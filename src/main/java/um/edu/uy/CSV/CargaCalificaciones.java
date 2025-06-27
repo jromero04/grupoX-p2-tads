@@ -52,9 +52,6 @@ public class CargaCalificaciones {
                     } catch (InvalidHashKey e) {
                         ignoradas++;
                         noEncontradas++;
-                        if (ignoradas <= 40) {
-                            System.out.println("Película no encontrada: " + idPelicula);
-                        }
                         continue;
                     }
 

@@ -44,4 +44,12 @@ public class Calificacion {
     public String getMesNombre(){
         return fecha.getMonth().name();
     }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
+    }
 }

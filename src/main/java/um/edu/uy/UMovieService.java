@@ -1,5 +1,8 @@
 package um.edu.uy;
 
+import um.edu.uy.Consultas.Consulta3;
+import um.edu.uy.Consultas.Consulta6;
+import um.edu.uy.Consultas.Top10PeliculasMejorCalificacion;
 import um.edu.uy.entities.*;
 import um.edu.uy.tads.List.MyLinkedList;
 import um.edu.uy.tads.List.MyList;
@@ -8,10 +11,6 @@ import um.edu.uy.tads.hash.Hash;
 import um.edu.uy.tads.hash.MyHash;
 import um.edu.uy.tads.hash.Node;
 import um.edu.uy.tads.heap.ArrayHeap;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class UMovieService {
     private MyHash<String, Pelicula> peliculas = new Hash<>();
@@ -92,36 +91,33 @@ public class UMovieService {
 
 
 
-    public void topPeliculasPorIdioma() {
-        String[] idiomas = {"en", "fr", "it", "es", "pt"};
-
-        for (String idioma : idiomas) {
-            ArrayHeap<Pelicula> heap = new ArrayHeap<>(true); // MaxHeap
-
-            Node<String, Pelicula>[] arreglo = peliculas.getArray();
-            for (Node<String, Pelicula> nodo : arreglo) {
-                if (nodo != null) {
-                    Pelicula p = nodo.getValue();
-                    if (p.getIdiomaOriginal().equals(idioma)) {
-                        // Verificar si la película tiene calificaciones
-                        if (p.getCantidadDeCalificaciones() > 0) {
-                            heap.insert(p);
-                        }
-                    }
-                }
-            }
-
-
-            System.out.println("Top 5 para idioma: " + idioma);
-            for (int i = 0; i < 5 && heap.size() > 0; i++) {
-                Pelicula p = heap.delete();
-                System.out.println(p.getIdPelicula() + ", " + p.getTituloPelicula() + ", " + p.getCantidadDeCalificaciones() + ", " + p.getIdiomaOriginal());
-            }
-            System.out.println();
-        }
-
-
-    }
+//    public void topPeliculasPorIdioma() {
+//        String[] idiomas = {"en", "fr", "it", "es", "pt"};
+//
+//        for (String idioma : idiomas) {
+//            ArrayHeap<Pelicula> heap = new ArrayHeap<>(true); // MaxHeap
+//
+//            Node<String, Pelicula>[] arreglo = peliculas.getArray();
+//            for (Node<String, Pelicula> nodo : arreglo) {
+//                if (nodo != null) {
+//                    Pelicula p = nodo.getValue();
+//                    if (p.getIdiomaOriginal().equals(idioma)) {
+//                        // Verificar si la película tiene calificaciones
+//                        if (p.getCantidadDeCalificaciones() > 0) {
+//                            heap.insert(p);
+//                        }
+//                    }
+//                }
+//            }
+//
+//            System.out.println("Top 5 para idioma: " + idioma);
+//            for (int i = 0; i < 5 && heap.size() > 0; i++) {
+//                Pelicula p = heap.delete();
+//                System.out.println(p.getIdPelicula() + ", " + p.getTituloPelicula() + ", " + p.getCantidadDeCalificaciones() + ", " + p.getIdiomaOriginal());
+//            }
+//            System.out.println();
+//        }
+//    }
 /*
     private static void ordenarPorCalificaciones(MyList<Pelicula> lista) {
         ArrayHeap<Pelicula> heap = new ArrayHeap<>(lista.size() + 1, true); // true = MaxHeap
@@ -145,12 +141,12 @@ public class UMovieService {
 
     public void mejorCalificacion(MyHash<String, Pelicula> peliculas) {
         Node<String, Pelicula>[] arreglo = peliculas.getArray();
-        ArrayHeap<Consulta2> promedioAuxiliar = new ArrayHeap<>(arreglo.length, true); //use length arreglo como capacidad del heap para que no sea fijo y dependa de la cant de datos
+        ArrayHeap<Top10PeliculasMejorCalificacion> promedioAuxiliar = new ArrayHeap<>(arreglo.length, true); //use length arreglo como capacidad del heap para que no sea fijo y dependa de la cant de datos
         for (Node<String, Pelicula> nodo : arreglo) {
             if (nodo != null) {
                 if (nodo.getValue().getCantidadDeCalificaciones() > 100){
                     Pelicula p = nodo.getValue();
-                    Consulta2 promedio = new Consulta2(p.getIdPelicula(), p.getTituloPelicula(), p.getPromedioCalificaciones());
+                    Top10PeliculasMejorCalificacion promedio = new Top10PeliculasMejorCalificacion(p.getIdPelicula(), p.getTituloPelicula(), p.getPromedioCalificaciones());
                     promedioAuxiliar.insert(promedio);
                 }
 
@@ -158,7 +154,7 @@ public class UMovieService {
         }
 
         for (int i = 0; i < 10 && promedioAuxiliar.size() > 0; i++) {
-            Consulta2 p = promedioAuxiliar.delete();
+            Top10PeliculasMejorCalificacion p = promedioAuxiliar.delete();
             System.out.println(p.getIdPelicula() + ", " + p.getTituloPelicula() + ", " + p.getCalificacionPromedio());
         }
 
@@ -218,7 +214,7 @@ public class UMovieService {
 
         }
         for (int coleccionIngreso = 1; coleccionIngreso <= ingresosTop.size(); coleccionIngreso++) {
-            System.out.println("Id colección: " + ingresosTop.get(coleccionIngreso).getIdColeccion() + ", Título colección: " + ingresosTop.get(coleccionIngreso).getTituloColeccion() + ", Cantidad de películas: " + ingresosTop.get(coleccionIngreso).getCantidadPeliculas() + ", Ids películas: " + ingresosTop.get(coleccionIngreso).getIdPeliculas() + "Ingresos Generados: " + ingresosTop.get(coleccionIngreso).getIngresosTotales());
+         //   System.out.println("Id colección: " + ingresosTop.get(coleccionIngreso).getIdColeccion() + ", Título colección: " + ingresosTop.get(coleccionIngreso).getTituloColeccion() + ", Cantidad de películas: " + ingresosTop.get(coleccionIngreso).getCantidadPeliculas() + ", Ids películas: " + ingresosTop.get(coleccionIngreso).getIdPeliculas() + "Ingresos Generados: " + ingresosTop.get(coleccionIngreso).getIngresosTotales());
         }
     }
 
@@ -226,7 +222,7 @@ public class UMovieService {
 
 
     public void topUsuariosGeneros(MyList<Calificacion> calificaciones ){
-        Hash<String, Integer> visualizacionesGeneros = new Hash<String, Integer>(1000);
+        Hash<String, Integer> visualizacionesGeneros = new Hash<String, Integer>();
 
         for(int i=0; i < calificaciones.size(); i++){
             MyList<String> generos = calificaciones.get(i).getPelicula().getGeneros();
@@ -274,7 +270,7 @@ public class UMovieService {
         for (int i = 1; i <= calificacionesAuxiliar.size(); i++) {
             Consulta6 c = calificacionesAuxiliar.get(i);                    // este c es un objeto de tipo consulta 6 a los que le hago los set
 
-            Hash<String, Integer> usuariosGeneros = new Hash<String, Integer>(1000);
+            Hash<String, Integer> usuariosGeneros = new Hash<String, Integer>();
 
             String claveGenero = c.getGenero();
             for (int calificacionesLista = 0; calificacionesLista < calificaciones.size(); calificacionesLista++){

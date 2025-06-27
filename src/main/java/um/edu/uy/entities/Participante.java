@@ -6,13 +6,12 @@ import um.edu.uy.tads.hash.MyHash;
 
 import java.util.Objects;
 
-public class Participante {
+public class Participante implements Comparable<Participante> {
     private String nombreParticipante;
-    /* los roles se encuentran en CSV credits, lista enorme de cast
-    lista de crew donde voy a encontrar la director y al final el id de la pelicula.
-    */
     private String rol;
     private MyHash<String, Pelicula> peliculas;
+    private double valorComparacion;
+    private int cantidadPeliculas;
 
     // ver si no agregar fecha por mes del anio para consultas
 
@@ -42,19 +41,32 @@ public class Participante {
         return peliculas;
     }
 
-    // evito que se agreguen mas de una vez el idPelicula
-    // que pasa si un participante aparece como director y actor en una misma pelicula??
     public void agregarPelicula(Pelicula pelicula) {
         if (!peliculas.contains(pelicula.getIdPelicula())) {
             peliculas.add(pelicula.getIdPelicula(),pelicula );
         }
     }
 
-    /* hay participantes que pueden ser actores y directores
-    al crear la instancia los diferencio
-    dos participantes son los mismos si comparten nombre y rol
-    Evitamos que al contar los trabajos de X actor y X director se mezclen entre si
-    */
+    public double getValorComparacion() {
+        return valorComparacion;
+    }
+
+    public void setValorComparacion(double valorComparacion) {
+        this.valorComparacion = valorComparacion;
+    }
+
+    public int getCantidadPeliculas() {
+        return cantidadPeliculas;
+    }
+
+    public void setCantidadPeliculas(int cantidadPeliculas) {
+        this.cantidadPeliculas = cantidadPeliculas;
+    }
+
+    @Override
+    public int compareTo(Participante otro) {
+        return Double.compare(this.valorComparacion, otro.valorComparacion);
+    }
 
     @Override
     public boolean equals(Object o) {

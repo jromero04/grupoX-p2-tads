@@ -10,4 +10,6 @@ public interface ArrayHeap_interface<T extends Comparable<T>> {
     String toString();
 
     T peek();
+
+    boolean isEmpty();
 }

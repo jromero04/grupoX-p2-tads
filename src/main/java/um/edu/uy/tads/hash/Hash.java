@@ -18,6 +18,7 @@ public class Hash<K, T> implements MyHash<K, T> {
         Arrays.fill(array, null);
     }
 
+    @Override
     public int getSize() {
         return size;
     }
@@ -196,7 +197,5 @@ public class Hash<K, T> implements MyHash<K, T> {
         }
         return listaClaves;
     }
-
-
 
 }

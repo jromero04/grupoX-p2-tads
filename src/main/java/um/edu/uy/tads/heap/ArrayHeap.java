@@ -114,5 +114,8 @@ public class ArrayHeap<T extends Comparable<T>> implements ArrayHeap_interface<T
         return heap[i];
     }
 
-
+    @Override
+    public boolean isEmpty() {
+        return size == 0;
+    }
 }

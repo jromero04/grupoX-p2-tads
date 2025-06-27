@@ -1,7 +1,4 @@
-package um.edu.uy;
-
-import um.edu.uy.tads.List.MyLinkedList;
-import um.edu.uy.tads.List.MyList;
+package um.edu.uy.Consultas;
 
 public class Consulta6 implements Comparable<Consulta6> {
     private String genero;

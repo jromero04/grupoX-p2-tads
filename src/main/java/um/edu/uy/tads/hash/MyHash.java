@@ -29,4 +29,5 @@ public interface MyHash<K,T> {
 
     MyList<K> keys();
 
+    int getSize();
 }

@@ -20,6 +20,8 @@ public class Pelicula implements Comparable<Pelicula>{
     private MyList<Calificacion> calificaciones = new MyLinkedList<>();
     private Coleccion coleccion;
 
+    private double valorComparacion;
+
     public Pelicula(String idPelicula, String tituloPelicula, String idiomaOriginal, double ingresos) {
         this.idPelicula = idPelicula;
         this.tituloPelicula = tituloPelicula;
@@ -136,7 +138,19 @@ public class Pelicula implements Comparable<Pelicula>{
     }
     @Override
     public String toString() {
-        return idPelicula + ", " + tituloPelicula + ", " + idiomaOriginal;
+        if (idiomaOriginal == null) {
+            return idPelicula + ", " + tituloPelicula + ", Idioma: Desconocido";
+        }else {
+            return idPelicula + ", " + tituloPelicula + ", " + idiomaOriginal;
+        }
+    }
+
+    public double getValorComparacion() {
+        return valorComparacion;
+    }
+
+    public void setValorComparacion(double valorComparacion) {
+        this.valorComparacion = valorComparacion;
     }
 
     @Override

@@ -54,10 +54,11 @@ public class CargaPeliculas {
                     String generosStr = partes[3].trim();
                     String coleccionStr = partes[1].trim();
 
-                    if (idStr.isEmpty() || titulo.isEmpty() || idioma.isEmpty()) {
+                    if (idStr.isEmpty() || titulo.isEmpty()) {
                         ignoradas++;
                         continue;
                     }
+                    idioma = idioma.isEmpty() ? null : idioma;
 
                     //int id = Integer.parseInt(idStr);
                     double ingresos = ingresosStr.isEmpty() ? 0 : Double.parseDouble(ingresosStr);
