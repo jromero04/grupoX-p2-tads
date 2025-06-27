@@ -9,7 +9,7 @@ import um.edu.uy.tads.hash.MyHash;
 import um.edu.uy.tads.hash.Node;
 import um.edu.uy.tads.heap.ArrayHeap;
 
-// funciona en main
+
 public class Top5PeliculasPorIdioma {
 
     private UMovieService servicio;

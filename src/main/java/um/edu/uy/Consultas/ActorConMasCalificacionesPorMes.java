@@ -10,7 +10,7 @@ import um.edu.uy.tads.hash.Hash;
 import um.edu.uy.tads.hash.MyHash;
 
 public class ActorConMasCalificacionesPorMes {
-    private UMovieService servicio = new UMovieService();
+    private UMovieService servicio;
 
     public ActorConMasCalificacionesPorMes(UMovieService servicio){
         this.servicio = servicio;
@@ -26,40 +26,37 @@ public class ActorConMasCalificacionesPorMes {
 
         for (int i = 0; i < calificaciones.size(); i++) {
             Calificacion c = calificaciones.get(i);
-            int mes = c.getFecha().getMonthValue(); // Verifica que `getFecha` esté implementado
-            Pelicula p = c.getPelicula(); // Verifica que `getPelicula` esté implementado
+            int mes = c.getMes();
+            Pelicula p = c.getPelicula();
             String idPelicula = p.getIdPelicula();
 
             MyList<Participante> elenco = p.getElenco();
 
             for (int j = 0; j < elenco.size(); j++) {
                 Participante actor = elenco.get(j);
-                if (!actor.getRol().equals("Actor")) continue; // Verifica que `getRol` esté implementado
+                if (!actor.getRol().equals("Actor")) continue;
 
-                String claveActor = actor.getNombreParticipante() + "-" + actor.getRol(); // Verifica que `getNombreParticipante` esté implementado
+                String claveActor = actor.getNombreParticipante() + "-" + actor.getRol();
 
-                synchronized (calificacionesPorMes) {
-                    MyHash<String, Integer> actoresMes = calificacionesPorMes.contains(mes)
-                            ? calificacionesPorMes.search(mes)
-                            : new Hash<>();
-                    actoresMes.add(claveActor, actoresMes.contains(claveActor)
-                            ? actoresMes.search(claveActor) + 1
-                            : 1);
-                    calificacionesPorMes.add(mes, actoresMes);
-                }
+                // Parte 1: actualizar cantidad de calificaciones
+                MyHash<String, Integer> actoresMes = calificacionesPorMes.contains(mes)
+                        ? calificacionesPorMes.search(mes)
+                        : new Hash<>();
+                actoresMes.add(claveActor, actoresMes.contains(claveActor)
+                        ? actoresMes.search(claveActor) + 1
+                        : 1);
+                calificacionesPorMes.add(mes, actoresMes);
 
-                synchronized (peliculasPorMes) {
-                    MyHash<String, MyHash<String, Boolean>> actoresPeliculasMes = peliculasPorMes.contains(mes)
-                            ? peliculasPorMes.search(mes)
-                            : new Hash<>();
-                    MyHash<String, Boolean> peliculasActor = actoresPeliculasMes.contains(claveActor)
-                            ? actoresPeliculasMes.search(claveActor)
-                            : new Hash<>();
-
-                    peliculasActor.add(idPelicula, true); // se guarda sin repetir
-                    actoresPeliculasMes.add(claveActor, peliculasActor);
-                    peliculasPorMes.add(mes, actoresPeliculasMes);
-                }
+                // Parte 2: actualizar películas vistas por actor ese mes
+                MyHash<String, MyHash<String, Boolean>> actoresPeliculasMes = peliculasPorMes.contains(mes)
+                        ? peliculasPorMes.search(mes)
+                        : new Hash<>();
+                MyHash<String, Boolean> peliculasActor = actoresPeliculasMes.contains(claveActor)
+                        ? actoresPeliculasMes.search(claveActor)
+                        : new Hash<>();
+                peliculasActor.add(idPelicula, true);
+                actoresPeliculasMes.add(claveActor, peliculasActor);
+                peliculasPorMes.add(mes, actoresPeliculasMes);
             }
         }
 

@@ -1,16 +1,11 @@
 package um.edu.uy;
 
-import um.edu.uy.AuxiliaresConsulta.IngresosColecciones;
-import um.edu.uy.AuxiliaresConsulta.TopUsuarioGenero;
-import um.edu.uy.AuxiliaresConsulta.ClasificacionesPeliculas;
 import um.edu.uy.entities.*;
 import um.edu.uy.tads.List.MyLinkedList;
 import um.edu.uy.tads.List.MyList;
 import um.edu.uy.tads.hash.Exceptions.InvalidHashKey;
 import um.edu.uy.tads.hash.Hash;
 import um.edu.uy.tads.hash.MyHash;
-import um.edu.uy.tads.hash.Node;
-import um.edu.uy.tads.heap.ArrayHeap;
 
 public class UMovieService {
     private MyHash<String, Pelicula> peliculas = new Hash<>();
@@ -53,7 +48,7 @@ public class UMovieService {
         try {
             return colecciones.search(idColeccion);
         } catch (InvalidHashKey e) {
-            return null; // si no existe esa clave en el hash
+            return null;
         }
     }
 
@@ -61,15 +56,6 @@ public class UMovieService {
         peliculas.add(p.getIdPelicula(), p);
     }
 
-    public MyList<Pelicula> getPeliculasComoLista() {
-        return peliculas.getValues();
-    }
-
-    public MyList<Coleccion> getColeccionesComoLista() {
-        return colecciones.getValues();
-    }
-
-    //dos nuevos
     public Participante obtenerParticipante(String nombre, String rol) throws InvalidHashKey {
         String clave = nombre + "-" + rol;
         if (!participantes.contains(clave)) {

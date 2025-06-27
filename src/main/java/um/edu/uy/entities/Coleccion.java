@@ -38,10 +38,6 @@ public class Coleccion implements Comparable<Coleccion>{
         return peliculas;
     }
 
-    public void setPeliculas(MyList<Pelicula> peliculas) {
-        this.peliculas = peliculas;
-    }
-
     public double getIngresosTotales() {
         return ingresosTotales;
     }
@@ -63,11 +59,10 @@ public class Coleccion implements Comparable<Coleccion>{
         }
     }
 
-    // si quisieramos ordenar las colecciones por ingresos
-    // paraa el top 5
+
     @Override
     public int compareTo(Coleccion otra) {
-        return Double.compare(otra.ingresosTotales, this.ingresosTotales); // orden descendente
+        return Double.compare(otra.ingresosTotales, this.ingresosTotales);
     }
 
 
@@ -79,8 +74,4 @@ public class Coleccion implements Comparable<Coleccion>{
         }
         return total;
     }
-
-
-
-    // recordar manejar en UMovieService que no haya colecciones con mismo id
 }

@@ -20,8 +20,6 @@ public class Pelicula implements Comparable<Pelicula>{
     private MyList<Calificacion> calificaciones = new MyLinkedList<>();
     private Coleccion coleccion;
 
-    private double valorComparacion;
-
     public Pelicula(String idPelicula, String tituloPelicula, String idiomaOriginal, double ingresos) {
         this.idPelicula = idPelicula;
         this.tituloPelicula = tituloPelicula;
@@ -115,27 +113,6 @@ public class Pelicula implements Comparable<Pelicula>{
         return suma / calificaciones.size();
     }
 
-    public double getMedianaCalificaciones(){
-        int n = calificaciones.size();
-        if (n==0) return 0;
-
-
-        // Extraer los puntajes de las calificaciones
-        double[] puntajes = new double[n];
-        for (int i = 0; i < n; i++) {
-            puntajes[i] = calificaciones.get(i).getPuntaje();
-        }
-
-        // Ordenar los puntajes
-        Arrays.sort(puntajes);
-
-        // Calcular la mediana
-        if (n % 2 == 0) {
-            return (puntajes[n / 2 - 1] + puntajes[n / 2]) / 2.0;
-        } else {
-            return puntajes[n / 2];
-        }
-    }
     @Override
     public String toString() {
         if (idiomaOriginal == null) {
@@ -143,14 +120,6 @@ public class Pelicula implements Comparable<Pelicula>{
         }else {
             return idPelicula + ", " + tituloPelicula + ", " + idiomaOriginal;
         }
-    }
-
-    public double getValorComparacion() {
-        return valorComparacion;
-    }
-
-    public void setValorComparacion(double valorComparacion) {
-        this.valorComparacion = valorComparacion;
     }
 
     @Override

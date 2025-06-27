@@ -87,7 +87,7 @@ public class MenuPrincipal {
                     consulta3.ingresosSaga();
                     break;
                 case "4":
-                    consulta4.ejecutar();
+                    consulta4.top10Directores();
                     break;
                 case "5":
                     consulta5.calcularActorPorMes();

@@ -19,10 +19,6 @@ public class Calificacion {
         return usuario;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
     public Pelicula getPelicula() {
         return pelicula;
     }
@@ -35,21 +31,9 @@ public class Calificacion {
         return puntaje;
     }
 
-    // chequeo por mes?
 
     public int getMes() {
         return fecha.getMonthValue();
     }
 
-    public String getMesNombre(){
-        return fecha.getMonth().name();
-    }
-
-    public LocalDateTime getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(LocalDateTime fecha) {
-        this.fecha = fecha;
-    }
 }

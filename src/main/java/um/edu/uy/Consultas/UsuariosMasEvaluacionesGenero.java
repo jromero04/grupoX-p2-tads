@@ -2,7 +2,6 @@ package um.edu.uy.Consultas;
 
 import um.edu.uy.AuxiliaresConsulta.TopUsuarioGenero;
 import um.edu.uy.UMovieService;
-import um.edu.uy.entities.Calificacion;
 import um.edu.uy.tads.List.MyList;
 import um.edu.uy.tads.hash.Exceptions.InvalidHashKey;
 import um.edu.uy.tads.hash.Hash;
@@ -19,7 +18,7 @@ public class UsuariosMasEvaluacionesGenero {
 
 
     public void topUsuariosGeneros(){
-        long inicio = System.currentTimeMillis(); // Inicio del tiempo de ejecución
+        long inicio = System.currentTimeMillis();
 
         Hash<String, Integer> visualizacionesGeneros = new Hash<String, Integer>();
 
@@ -118,7 +117,7 @@ public class UsuariosMasEvaluacionesGenero {
             System.out.println(calificacionesAuxiliar2.get(generoTopUsuario).getIdusuario() + ", " + calificacionesAuxiliar2.get(generoTopUsuario).getGenero() + ", " + calificacionesAuxiliar2.get(generoTopUsuario).getCantidadEvaluacionesUsuarioTop());
         }
 
-        long fin = System.currentTimeMillis(); // Fin del tiempo de ejecución
+        long fin = System.currentTimeMillis();
         System.out.println("Tiempo de ejecución de la consulta: " + (fin - inicio) + " ms");
 
     }

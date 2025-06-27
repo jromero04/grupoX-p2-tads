@@ -6,14 +6,10 @@ import um.edu.uy.tads.hash.MyHash;
 
 import java.util.Objects;
 
-public class Participante implements Comparable<Participante> {
+public class Participante {
     private String nombreParticipante;
     private String rol;
     private MyHash<String, Pelicula> peliculas;
-    private double valorComparacion;
-    private int cantidadPeliculas;
-
-    // ver si no agregar fecha por mes del anio para consultas
 
     public Participante(String nombreParticipante, String rol) {
         this.nombreParticipante = nombreParticipante;
@@ -25,16 +21,8 @@ public class Participante implements Comparable<Participante> {
         return nombreParticipante;
     }
 
-    public void setNombreParticipante(String nombreParticipante) {
-        this.nombreParticipante = nombreParticipante;
-    }
-
     public String getRol() {
         return rol;
-    }
-
-    public void setRol(String rol) {
-        this.rol = rol;
     }
 
     public MyHash<String, Pelicula> getPeliculas() {
@@ -47,26 +35,6 @@ public class Participante implements Comparable<Participante> {
         }
     }
 
-    public double getValorComparacion() {
-        return valorComparacion;
-    }
-
-    public void setValorComparacion(double valorComparacion) {
-        this.valorComparacion = valorComparacion;
-    }
-
-    public int getCantidadPeliculas() {
-        return cantidadPeliculas;
-    }
-
-    public void setCantidadPeliculas(int cantidadPeliculas) {
-        this.cantidadPeliculas = cantidadPeliculas;
-    }
-
-    @Override
-    public int compareTo(Participante otro) {
-        return Double.compare(this.valorComparacion, otro.valorComparacion);
-    }
 
     @Override
     public boolean equals(Object o) {
