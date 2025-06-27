@@ -18,13 +18,13 @@ public class UsuariosMasEvaluacionesGenero {
     }
 
 
-    public void topUsuariosGeneros(MyList<Calificacion> calificaciones ){
+    public void topUsuariosGeneros(){
         long inicio = System.currentTimeMillis(); // Inicio del tiempo de ejecución
 
         Hash<String, Integer> visualizacionesGeneros = new Hash<String, Integer>();
 
-        for(int elementoCalificaciones = 0; elementoCalificaciones < calificaciones.size(); elementoCalificaciones++){
-            MyList<String> generos = calificaciones.get(elementoCalificaciones).getPelicula().getGeneros();
+        for(int elementoCalificaciones = 0; elementoCalificaciones < servicio.getCalificaciones().size(); elementoCalificaciones++){
+            MyList<String> generos = servicio.getCalificaciones().get(elementoCalificaciones).getPelicula().getGeneros();
             for(int elementoGeneros = 0; elementoGeneros < generos.size(); elementoGeneros++){
 
                 Integer cantidadVistas = null;
@@ -51,7 +51,7 @@ public class UsuariosMasEvaluacionesGenero {
 
         }
 
-        Node<String, Integer>[] arregloVisualizacionesGenero = visualizacionesGeneros.getArray();
+      /*  Node<String, Integer>[] arregloVisualizacionesGenero = visualizacionesGeneros.getArray();
         ArrayHeap<TopUsuarioGenero> calificacionesAuxiliar = new ArrayHeap<>(1000, false);
         for (Node<String, Integer> nodoCalificacionesAuxiliar : arregloVisualizacionesGenero) {
             if (nodoCalificacionesAuxiliar != null) {
@@ -70,9 +70,9 @@ public class UsuariosMasEvaluacionesGenero {
             Hash<String, Integer> usuariosGeneros = new Hash<String, Integer>();
 
             String claveGenero = visualizacionesUsuarioGenero.getGenero();
-            for (int calificacionesLista = 0; calificacionesLista < calificaciones.size(); calificacionesLista++){
-                String usuario = calificaciones.get(calificacionesLista).getUsuario().getIdUsuario();
-                if (calificaciones.get(calificacionesLista).getPelicula().getGeneros().getValue(claveGenero) != null){
+            for (int calificacionesLista = 0; calificacionesLista < servicio.getCalificaciones().size(); calificacionesLista++){
+                String usuario = servicio.getCalificaciones().get(calificacionesLista).getUsuario().getIdUsuario();
+                if (servicio.getCalificaciones().get(calificacionesLista).getPelicula().getGeneros().getValue(claveGenero) != null){
 
                     Integer cantidadCalificacionesUsuario = null;
 
@@ -113,5 +113,7 @@ public class UsuariosMasEvaluacionesGenero {
         long fin = System.currentTimeMillis(); // Fin del tiempo de ejecución
         System.out.println("Tiempo de ejecución de la consulta: " + (fin - inicio) + " ms");
 
+    */
     }
+
 }

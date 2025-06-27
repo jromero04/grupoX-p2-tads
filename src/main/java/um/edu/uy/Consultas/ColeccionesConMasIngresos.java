@@ -19,16 +19,16 @@ public class ColeccionesConMasIngresos {
         this.servicio = servicio;
     }
 
-    public void ingresosSaga (MyHash<String, Coleccion> colecciones) {
+    public void ingresosSaga () {
         long inicio = System.currentTimeMillis();
 
-        Node<String, Coleccion>[] arregloColecciones = colecciones.getArray();
+        Node<String, Coleccion>[] arregloColecciones = servicio.getColecciones().getArray();
         ArrayHeap<IngresosColecciones> heapIngresosSaga = new ArrayHeap<>(1000, true);
 
         for (Node<String, Coleccion> nodoColeccion : arregloColecciones) {
             if (nodoColeccion != null) {
                 Coleccion coleccionEnArreglo = nodoColeccion.getValue();
-                IngresosColecciones ingresoColeccion = new IngresosColecciones(coleccionEnArreglo.getIdColeccion(), coleccionEnArreglo.getTituloColeccion(), coleccionEnArreglo.getIngresosTotales());
+                IngresosColecciones ingresoColeccion = new IngresosColecciones(coleccionEnArreglo.getIdColeccion(), coleccionEnArreglo.getTituloColeccion(), coleccionEnArreglo.calcularIngresos());
                 heapIngresosSaga.insert(ingresoColeccion);
             }
         }
@@ -47,7 +47,7 @@ public class ColeccionesConMasIngresos {
             Coleccion coleccion = null;
 
             try {
-                coleccion = colecciones.search(idColeccion);
+                coleccion = servicio.getColecciones().search(idColeccion);
             } catch (InvalidHashKey e) {
             }
             if (coleccion != null) {
@@ -66,7 +66,7 @@ public class ColeccionesConMasIngresos {
 
         }
         for (int coleccionIngreso = 1; coleccionIngreso <= ingresosTop.size(); coleccionIngreso++) {
-            System.out.println("Id colección: " + ingresosTop.get(coleccionIngreso).getIdColeccion() + ", Título colección: " + ingresosTop.get(coleccionIngreso).getTituloColeccion() + ", Cantidad de películas: " + ingresosTop.get(coleccionIngreso).getCantidadPeliculas() + ", Ids películas: " + ingresosTop.get(coleccionIngreso).getIdPeliculas() + "Ingresos Generados: " + ingresosTop.get(coleccionIngreso).getIngresosTotales());
+            System.out.println("Id colección: " + ingresosTop.get(coleccionIngreso).getIdColeccion() + ", Título colección: " + ingresosTop.get(coleccionIngreso).getTituloColeccion() + ", Cantidad de películas: " + ingresosTop.get(coleccionIngreso).getCantidadPeliculas() + ", Ids películas: " + ingresosTop.get(coleccionIngreso).getIdPeliculas() + ", Ingresos Generados: " + ingresosTop.get(coleccionIngreso).getIngresosTotales());
         }
 
         long fin = System.currentTimeMillis(); // Fin del tiempo de ejecución

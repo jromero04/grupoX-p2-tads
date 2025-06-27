@@ -15,10 +15,10 @@ public class PeliculasMejorCalificacionMedia {
         this.servicio = servicio;
     }
 
-    public void mejorCalificacion(MyHash<String, Pelicula> peliculas) {
+    public void mejorCalificacion() {
         long inicio = System.currentTimeMillis(); // Inicio del tiempo de ejecución
 
-        Node<String, Pelicula>[] arregloPeliculas = peliculas.getArray();
+        Node<String, Pelicula>[] arregloPeliculas = servicio.getPeliculas().getArray();
         ArrayHeap<ClasificacionesPeliculas> heapPeliculasClasificacion = new ArrayHeap<>(1000, true);
         for (Node<String, Pelicula> nodoPelicula : arregloPeliculas) {
             if (nodoPelicula != null) {

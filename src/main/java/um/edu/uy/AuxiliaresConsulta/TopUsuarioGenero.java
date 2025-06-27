@@ -38,8 +38,8 @@ public class TopUsuarioGenero implements Comparable<TopUsuarioGenero> {
 
 
 
-    public int compareTo(TopUsuarioGenero otra) {
-        return Double.compare(this.getCantidadEvaluaciones(), otra.getCantidadEvaluaciones());
+    public int compareTo(TopUsuarioGenero usuarioCantidadEvaluaciones) {
+        return Double.compare(this.getCantidadEvaluaciones(), usuarioCantidadEvaluaciones.getCantidadEvaluaciones());
     }
 
 }

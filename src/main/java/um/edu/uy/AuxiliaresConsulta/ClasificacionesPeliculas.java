@@ -6,7 +6,7 @@ public class ClasificacionesPeliculas implements Comparable<ClasificacionesPelic
     private String tituloPelicula;
     private double calificacionPromedio;
 
-    public ClasificacionesPeliculas(String IdPelicula, String tituloPelicula, double calificacionMedia){
+    public ClasificacionesPeliculas(String idPelicula, String tituloPelicula, double calificacionMedia){
         this.idPelicula = idPelicula;
         this.tituloPelicula = tituloPelicula;
         this.calificacionPromedio = calificacionMedia;
@@ -17,18 +17,6 @@ public class ClasificacionesPeliculas implements Comparable<ClasificacionesPelic
     public String getTituloPelicula(){return tituloPelicula;}
 
     public double getCalificacionPromedio(){return calificacionPromedio;}
-
-    public void setIdPelicula(String idPelicula) {
-        this.idPelicula = idPelicula;
-    }
-
-    public void setTituloPelicula(String tituloPelicula) {
-        this.tituloPelicula = tituloPelicula;
-    }
-
-    public void setCalificacionPromedio(double calificacionPromedio) {
-        this.calificacionPromedio = calificacionPromedio;
-    }
 
     @Override
     public int compareTo(ClasificacionesPeliculas peliculaComparada) {

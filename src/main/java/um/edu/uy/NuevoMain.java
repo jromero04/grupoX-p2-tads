@@ -3,9 +3,7 @@ package um.edu.uy;
 import um.edu.uy.CSV.CargaCalificaciones;
 import um.edu.uy.CSV.CargaCreditos;
 import um.edu.uy.CSV.CargaPeliculas;
-import um.edu.uy.Consultas.ActorConMasCalificacionesPorMes;
-import um.edu.uy.Consultas.Top10DirectoresConMejorCalificacion;
-import um.edu.uy.Consultas.Top5PeliculasPorIdioma;
+import um.edu.uy.Consultas.*;
 import um.edu.uy.tads.hash.Exceptions.InvalidHashKey;
 
 import java.util.Scanner;
@@ -57,8 +55,12 @@ public class NuevoMain {
 
     private static void mostrarSubmenuConsultas(Scanner scanner, UMovieService servicio) throws InvalidHashKey {
         Top5PeliculasPorIdioma consulta1 = new Top5PeliculasPorIdioma(servicio);
-        ActorConMasCalificacionesPorMes consulta5 = new ActorConMasCalificacionesPorMes(servicio);
+        PeliculasMejorCalificacionMedia consulta2 = new PeliculasMejorCalificacionMedia(servicio);
+        ColeccionesConMasIngresos consulta3 = new ColeccionesConMasIngresos(servicio);
         Top10DirectoresConMejorCalificacion consulta4 = new Top10DirectoresConMejorCalificacion(servicio);
+        ActorConMasCalificacionesPorMes consulta5 = new ActorConMasCalificacionesPorMes(servicio);
+        UsuariosMasEvaluacionesGenero consulta6 = new UsuariosMasEvaluacionesGenero(servicio);
+
 
         boolean volver = false;
 
@@ -76,18 +78,13 @@ public class NuevoMain {
 
             switch (opcionConsulta) {
                 case "1":
-                    long inicio = System.currentTimeMillis();
                     consulta1.topPeliculasPorIdioma();
-                    long fin = System.currentTimeMillis();
-                    long tiempo = fin - inicio;
-                    System.out.println("Tiempo de ejecucion de la consulta: " + tiempo + " ms");
                     break;
                 case "2":
-
-                    //consulta1.topPeliculasPorIdioma();
+                    consulta2.mejorCalificacion();
                     break;
                 case "3":
-                    //consulta1.topPeliculasPorIdioma();
+                    consulta3.ingresosSaga();
                     break;
                 case "4":
                     consulta4.ejecutar();
@@ -96,7 +93,7 @@ public class NuevoMain {
                     consulta5.calcularActorPorMes();
                     break;
                 case "6":
-                    //consulta1.topPeliculasPorIdioma();
+                    consulta6.topUsuariosGeneros();
                     break;
                 case "7":
                     volver = true;
