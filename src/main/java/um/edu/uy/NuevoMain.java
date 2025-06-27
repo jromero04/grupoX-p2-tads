@@ -3,7 +3,9 @@ package um.edu.uy;
 import um.edu.uy.CSV.CargaCalificaciones;
 import um.edu.uy.CSV.CargaCreditos;
 import um.edu.uy.CSV.CargaPeliculas;
-import um.edu.uy.Consultas.*;
+import um.edu.uy.Consultas.ActorConMasCalificacionesPorMes;
+import um.edu.uy.Consultas.Top10DirectoresConMejorCalificacion;
+import um.edu.uy.Consultas.Top5PeliculasPorIdioma;
 import um.edu.uy.tads.hash.Exceptions.InvalidHashKey;
 
 import java.util.Scanner;
@@ -55,12 +57,8 @@ public class NuevoMain {
 
     private static void mostrarSubmenuConsultas(Scanner scanner, UMovieService servicio) throws InvalidHashKey {
         Top5PeliculasPorIdioma consulta1 = new Top5PeliculasPorIdioma(servicio);
-        PeliculasMejorCalificacionMedia consulta2 = new PeliculasMejorCalificacionMedia(servicio);
-        ColeccionesConMasIngresos consulta3 = new ColeccionesConMasIngresos(servicio);
-        Top10DirectoresPorMediana consulta4 = new Top10DirectoresPorMediana(servicio);
         ActorConMasCalificacionesPorMes consulta5 = new ActorConMasCalificacionesPorMes(servicio);
-        UsuariosMasEvaluacionesGenero consulta6 = new UsuariosMasEvaluacionesGenero(servicio);
-
+        Top10DirectoresConMejorCalificacion consulta4 = new Top10DirectoresConMejorCalificacion(servicio);
 
         boolean volver = false;
 
@@ -81,19 +79,19 @@ public class NuevoMain {
                     consulta1.topPeliculasPorIdioma();
                     break;
                 case "2":
-                    consulta2.mejorCalificacion(servicio.getPeliculas());
+                    //consulta1.topPeliculasPorIdioma();
                     break;
                 case "3":
-                    consulta3.ingresosSaga(servicio.getColecciones());
+                    //consulta1.topPeliculasPorIdioma();
                     break;
                 case "4":
                     consulta4.ejecutar();
                     break;
                 case "5":
-                    consulta5.calcularActorPorMesOptimizado();
+                    consulta5.calcularActorPorMes();
                     break;
                 case "6":
-                    consulta6.topUsuariosGeneros(servicio.getCalificaciones());
+                    //consulta1.topPeliculasPorIdioma();
                     break;
                 case "7":
                     volver = true;

@@ -2,6 +2,10 @@ package um.edu.uy.Consultas;
 
 import um.edu.uy.UMovieService;
 import um.edu.uy.entities.Pelicula;
+import um.edu.uy.tads.List.MyLinkedList;
+import um.edu.uy.tads.List.MyList;
+import um.edu.uy.tads.hash.Hash;
+import um.edu.uy.tads.hash.MyHash;
 import um.edu.uy.tads.hash.Node;
 import um.edu.uy.tads.heap.ArrayHeap;
 
@@ -33,21 +37,33 @@ public class Top5PeliculasPorIdioma {
         ArrayHeap<Pelicula> heap = new ArrayHeap<>(true); // MaxHeap
 
         Node<String, Pelicula>[] arreglo = servicio.getPeliculas().getArray();
-        int peliculasFiltradas =0;
         for (Node<String, Pelicula> nodo : arreglo) {
             if (nodo != null) {
                 Pelicula p = nodo.getValue();
                 if (p.getIdiomaOriginal() != null && p.getIdiomaOriginal().equals(idioma) && p.getCantidadDeCalificaciones() > 0) {
                     heap.insert(p);
-                    peliculasFiltradas++;
                 }
             }
         }
-
-        // Depuración: imprimir cantidad de películas filtradas
-        System.out.println("Películas filtradas para idioma '" + idioma + "': " + peliculasFiltradas);
-
         return heap;
+    }
+
+    public MyHash<String, MyList<Pelicula>> obtenerTopPeliculasPorIdioma() {
+        MyHash<String, MyList<Pelicula>> resultado = new Hash<>();
+        String[] idiomas = {"en", "fr", "it", "es", "pt"};
+
+        for (String idioma : idiomas) {
+            ArrayHeap<Pelicula> heap = construirHeapPorIdioma(idioma);
+            MyList<Pelicula> top5 = new MyLinkedList<>();
+
+            for (int i = 0; i < 5 && !heap.isEmpty(); i++) {
+                top5.add(heap.delete());
+            }
+
+            resultado.add(idioma, top5);
+        }
+
+        return resultado;
     }
 
 }

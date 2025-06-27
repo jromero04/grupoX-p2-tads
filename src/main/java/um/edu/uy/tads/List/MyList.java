@@ -18,4 +18,6 @@ public interface MyList<T> {
     int size();
 
     void add(int index, T value);
+
+    boolean isEmpty();
 }

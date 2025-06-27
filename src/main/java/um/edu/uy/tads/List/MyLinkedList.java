@@ -230,4 +230,9 @@ public class MyLinkedList<T> implements MyList<T> {
         size++;
     }
 
+    @Override
+    public boolean isEmpty(){
+        return size == 0;
+    }
+
 }

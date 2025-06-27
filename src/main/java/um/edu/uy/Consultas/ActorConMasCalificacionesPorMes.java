@@ -16,141 +16,88 @@ public class ActorConMasCalificacionesPorMes {
         this.servicio = servicio;
     }
 
-    /*public void calcularActorPorMes() throws InvalidHashKey {
-        MyHash<Integer, MyHash<String, Integer>> conteoPorMes = new Hash<>();
-        MyHash<String, Integer> peliculasPorActor = new Hash<>();
+    public void calcularActorPorMes() throws InvalidHashKey {
+        MyHash<Integer, MyHash<String, Integer>> calificacionesPorMes = new Hash<>();
+        MyHash<Integer, MyHash<String, MyHash<String, Boolean>>> peliculasPorMes = new Hash<>();
 
         MyList<Calificacion> calificaciones = servicio.getCalificaciones();
 
-        // Precomputar calificaciones por mes y actor
+        long inicio = System.currentTimeMillis();
+
         for (int i = 0; i < calificaciones.size(); i++) {
             Calificacion c = calificaciones.get(i);
-            Pelicula p = c.getPelicula();
-            int mes = c.getFecha().getMonthValue();
+            int mes = c.getFecha().getMonthValue(); // Verifica que `getFecha` esté implementado
+            Pelicula p = c.getPelicula(); // Verifica que `getPelicula` esté implementado
+            String idPelicula = p.getIdPelicula();
 
-            // Inicializar el hash para el mes si no existe
-            if (!conteoPorMes.contains(mes)) {
-                conteoPorMes.add(mes, new Hash<>());
-            }
-
-            MyHash<String, Integer> actoresMes = conteoPorMes.search(mes);
-
-            // Contar calificaciones por actor
             MyList<Participante> elenco = p.getElenco();
+
             for (int j = 0; j < elenco.size(); j++) {
                 Participante actor = elenco.get(j);
-                String nombreActor = actor.getNombreParticipante();
+                if (!actor.getRol().equals("Actor")) continue; // Verifica que `getRol` esté implementado
 
-                int calificacionesActor = actoresMes.contains(nombreActor)
-                        ? actoresMes.search(nombreActor)
-                        : 0;
-                actoresMes.add(nombreActor, calificacionesActor + 1);
+                String claveActor = actor.getNombreParticipante() + "-" + actor.getRol(); // Verifica que `getNombreParticipante` esté implementado
 
-                // Contar películas vistas por actor
-                int peliculasActor = peliculasPorActor.contains(nombreActor)
-                        ? peliculasPorActor.search(nombreActor)
-                        : 0;
-                peliculasPorActor.add(nombreActor, peliculasActor + 1);
+                synchronized (calificacionesPorMes) {
+                    MyHash<String, Integer> actoresMes = calificacionesPorMes.contains(mes)
+                            ? calificacionesPorMes.search(mes)
+                            : new Hash<>();
+                    actoresMes.add(claveActor, actoresMes.contains(claveActor)
+                            ? actoresMes.search(claveActor) + 1
+                            : 1);
+                    calificacionesPorMes.add(mes, actoresMes);
+                }
+
+                synchronized (peliculasPorMes) {
+                    MyHash<String, MyHash<String, Boolean>> actoresPeliculasMes = peliculasPorMes.contains(mes)
+                            ? peliculasPorMes.search(mes)
+                            : new Hash<>();
+                    MyHash<String, Boolean> peliculasActor = actoresPeliculasMes.contains(claveActor)
+                            ? actoresPeliculasMes.search(claveActor)
+                            : new Hash<>();
+
+                    peliculasActor.add(idPelicula, true); // se guarda sin repetir
+                    actoresPeliculasMes.add(claveActor, peliculasActor);
+                    peliculasPorMes.add(mes, actoresPeliculasMes);
+                }
             }
         }
 
-        // Mostrar resultados
+        // mostrar resultados
         for (int mes = 1; mes <= 12; mes++) {
-            if (!conteoPorMes.contains(mes)) continue;
+            if (!calificacionesPorMes.contains(mes)) continue;
 
-            MyHash<String, Integer> actoresMes = conteoPorMes.search(mes);
-            MyList<String> nombresActores = actoresMes.keys();
+            MyHash<String, Integer> actoresMes = calificacionesPorMes.search(mes);
+            MyList<String> actores = actoresMes.keys();
 
-            String actorTop = null;
+            String mejorActor = null;
             int maxCalificaciones = 0;
 
-            // Encontrar el actor con más calificaciones
-            for (int i = 0; i < nombresActores.size(); i++) {
-                String nombreActor = nombresActores.get(i);
-                int calificacionesActor = actoresMes.search(nombreActor);
-
-                if (calificacionesActor > maxCalificaciones) {
-                    maxCalificaciones = calificacionesActor;
-                    actorTop = nombreActor;
+            for (int i = 0; i < actores.size(); i++) {
+                String actor = actores.get(i);
+                int califs = actoresMes.search(actor);
+                if (califs > maxCalificaciones) {
+                    maxCalificaciones = califs;
+                    mejorActor = actor;
                 }
             }
 
-            if (actorTop != null) {
-                int peliculasVistas = peliculasPorActor.search(actorTop);
-
-                System.out.println("Mes: " + mes);
-                System.out.println("Actor: " + actorTop);
-                System.out.println("Películas vistas: " + peliculasVistas);
-                System.out.println("Total calificaciones: " + maxCalificaciones);
-                System.out.println();
-            }
-        }
-    }*/
-
-    public void calcularActorPorMesOptimizado() throws InvalidHashKey {
-        MyHash<Integer, MyHash<String, Integer>> conteoPorMes = new Hash<>();
-        MyHash<String, Integer> peliculasPorActor = new Hash<>();
-
-        MyList<Calificacion> calificaciones = servicio.getCalificaciones();
-
-        // Precomputar calificaciones por mes y actor
-        for (int i = 0; i < calificaciones.size(); i++) {
-            Calificacion c = calificaciones.get(i);
-            Pelicula p = c.getPelicula();
-            int mes = c.getFecha().getMonthValue();
-
-            // Inicializar el hash para el mes si no existe
-            MyHash<String, Integer> actoresMes = conteoPorMes.contains(mes)
-                    ? conteoPorMes.search(mes)
-                    : new Hash<>();
-            conteoPorMes.add(mes, actoresMes);
-
-            // Contar calificaciones por actor
-            MyList<Participante> elenco = p.getElenco();
-            for (int j = 0; j < elenco.size(); j++) {
-                Participante actor = elenco.get(j);
-                String nombreActor = actor.getNombreParticipante();
-
-                actoresMes.add(nombreActor, actoresMes.contains(nombreActor)
-                        ? actoresMes.search(nombreActor) + 1
-                        : 1);
-
-                peliculasPorActor.add(nombreActor, peliculasPorActor.contains(nombreActor)
-                        ? peliculasPorActor.search(nombreActor) + 1
-                        : 1);
-            }
-        }
-
-        // Mostrar resultados
-        for (int mes = 1; mes <= 12; mes++) {
-            if (!conteoPorMes.contains(mes)) continue;
-
-            MyHash<String, Integer> actoresMes = conteoPorMes.search(mes);
-            MyList<String> nombresActores = actoresMes.keys();
-
-            String actorTop = null;
-            int maxCalificaciones = 0;
-
-            // Encontrar el actor con más calificaciones
-            for (int i = 0; i < nombresActores.size(); i++) {
-                String nombreActor = nombresActores.get(i);
-                int calificacionesActor = actoresMes.search(nombreActor);
-
-                if (calificacionesActor > maxCalificaciones) {
-                    maxCalificaciones = calificacionesActor;
-                    actorTop = nombreActor;
+            if (mejorActor != null) {
+                int peliculasVistas = 0;
+                if (peliculasPorMes.contains(mes)) {
+                    MyHash<String, MyHash<String, Boolean>> actoresPeliculas = peliculasPorMes.search(mes);
+                    if (actoresPeliculas.contains(mejorActor)) {
+                        peliculasVistas = actoresPeliculas.search(mejorActor).getSize();
+                    }
                 }
-            }
 
-            if (actorTop != null) {
-                int peliculasVistas = peliculasPorActor.search(actorTop);
-
-                System.out.println("Mes: " + mes);
-                System.out.println("Actor: " + actorTop);
-                System.out.println("Películas vistas: " + peliculasVistas);
-                System.out.println("Total calificaciones: " + maxCalificaciones);
-                System.out.println();
+                System.out.println(mes + "," + mejorActor + "," + peliculasVistas + "," + maxCalificaciones);
             }
         }
+        long fin = System.currentTimeMillis();
+        System.out.println("Tiempo de ejecucion de la consulta: " + (fin - inicio) + " ms");
     }
+
 }
+
+
