@@ -66,13 +66,12 @@ public class ColeccionesConMasIngresos {
 
         }
         for (int coleccionIngreso = 1; coleccionIngreso <= ingresosTop.size(); coleccionIngreso++) {
-            System.out.println("Id colección: " + ingresosTop.get(coleccionIngreso).getIdColeccion() + ", Título colección: " + ingresosTop.get(coleccionIngreso).getTituloColeccion() + ", Cantidad de películas: " + ingresosTop.get(coleccionIngreso).getCantidadPeliculas() + ", Ids películas: " + ingresosTop.get(coleccionIngreso).getIdPeliculas() + ", Ingresos Generados: " + ingresosTop.get(coleccionIngreso).getIngresosTotales());
+            System.out.println(ingresosTop.get(coleccionIngreso).getIdColeccion() + ", " + ingresosTop.get(coleccionIngreso).getTituloColeccion() + ", " + ingresosTop.get(coleccionIngreso).getCantidadPeliculas() + ", " + ingresosTop.get(coleccionIngreso).getIdPeliculas() + ", " + ingresosTop.get(coleccionIngreso).getIngresosTotales());
         }
 
         long fin = System.currentTimeMillis(); // Fin del tiempo de ejecución
         System.out.println("Tiempo de ejecución de la consulta: " + (fin - inicio) + " ms");
 
     }
-
 
 }

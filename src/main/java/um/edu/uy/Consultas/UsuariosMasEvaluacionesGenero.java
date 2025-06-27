@@ -51,21 +51,29 @@ public class UsuariosMasEvaluacionesGenero {
 
         }
 
-      /*  Node<String, Integer>[] arregloVisualizacionesGenero = visualizacionesGeneros.getArray();
-        ArrayHeap<TopUsuarioGenero> calificacionesAuxiliar = new ArrayHeap<>(1000, false);
+
+
+        Node<String, Integer>[] arregloVisualizacionesGenero = visualizacionesGeneros.getArray();
+        ArrayHeap<TopUsuarioGenero> calificacionesAuxiliar = new ArrayHeap<>(1000, true);
         for (Node<String, Integer> nodoCalificacionesAuxiliar : arregloVisualizacionesGenero) {
             if (nodoCalificacionesAuxiliar != null) {
-                TopUsuarioGenero consulta6 = new TopUsuarioGenero(nodoCalificacionesAuxiliar.getKey(), nodoCalificacionesAuxiliar.getValue());
-                calificacionesAuxiliar.insert(consulta6);
+                TopUsuarioGenero usuarioPorGenero = new TopUsuarioGenero(nodoCalificacionesAuxiliar.getKey(), nodoCalificacionesAuxiliar.getValue());
+                calificacionesAuxiliar.insert(usuarioPorGenero);
             }
         }
 
-        for (int elementoCalificacionesAuxiliar = 0; elementoCalificacionesAuxiliar < calificacionesAuxiliar.size() - 10; elementoCalificacionesAuxiliar++) {
-            calificacionesAuxiliar.delete();
+
+        ArrayHeap<TopUsuarioGenero> calificacionesAuxiliar2 = new ArrayHeap<>(1000, true);
+        for (int elementoCalificacionesAuxiliar = 0; elementoCalificacionesAuxiliar < 10; elementoCalificacionesAuxiliar++) {
+            TopUsuarioGenero generotop = calificacionesAuxiliar.delete();
+            calificacionesAuxiliar2.insert(generotop);
         }
 
-        for (int elementoCalificacionesAuxiliar = 1; elementoCalificacionesAuxiliar <= calificacionesAuxiliar.size(); elementoCalificacionesAuxiliar++) {
-            TopUsuarioGenero visualizacionesUsuarioGenero = calificacionesAuxiliar.get(elementoCalificacionesAuxiliar);
+
+
+
+        for (int elementoCalificacionesAuxiliar = 1; elementoCalificacionesAuxiliar <= calificacionesAuxiliar2.size(); elementoCalificacionesAuxiliar++) {
+            TopUsuarioGenero visualizacionesUsuarioGenero = calificacionesAuxiliar2.get(elementoCalificacionesAuxiliar);
 
             Hash<String, Integer> usuariosGeneros = new Hash<String, Integer>();
 
@@ -96,7 +104,7 @@ public class UsuariosMasEvaluacionesGenero {
             String usuarioTop = null;
             Integer cantidadTop = 0;
             for (Node<String, Integer> nodoArregloUsuarios : arregloUsuarios){
-                if (nodoArregloUsuarios.getValue() > cantidadTop){
+                if (nodoArregloUsuarios != null && nodoArregloUsuarios.getValue() > cantidadTop){
                     usuarioTop = nodoArregloUsuarios.getKey();
                     cantidadTop = nodoArregloUsuarios.getValue();
                 }
@@ -106,14 +114,12 @@ public class UsuariosMasEvaluacionesGenero {
             visualizacionesUsuarioGenero.setCantidadEvaluacionesUsuarioTop(cantidadTop);
         }
 
-        for (int generoTopUsuario = 1; generoTopUsuario <= calificacionesAuxiliar.size(); generoTopUsuario++){
-            System.out.println("Id usuario: " + calificacionesAuxiliar.get(generoTopUsuario).getIdusuario() + ", Género" + calificacionesAuxiliar.get(generoTopUsuario).getGenero() + ", Cantidad de evaluaciones " + calificacionesAuxiliar.get(generoTopUsuario).getCantidadEvaluacionesUsuarioTop());
+        for (int generoTopUsuario = 1; generoTopUsuario <= calificacionesAuxiliar2.size(); generoTopUsuario++){
+            System.out.println(calificacionesAuxiliar2.get(generoTopUsuario).getIdusuario() + ", " + calificacionesAuxiliar2.get(generoTopUsuario).getGenero() + ", " + calificacionesAuxiliar2.get(generoTopUsuario).getCantidadEvaluacionesUsuarioTop());
         }
 
         long fin = System.currentTimeMillis(); // Fin del tiempo de ejecución
         System.out.println("Tiempo de ejecución de la consulta: " + (fin - inicio) + " ms");
 
-    */
     }
-
 }
