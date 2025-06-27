@@ -15,7 +15,6 @@ public class CargaPeliculas {
         String ruta = "movies_metadata.csv";
         int cargadas = 0;
         int ignoradas = 0;
-        long inicio = System.currentTimeMillis();
 
         try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
             String cabecera = br.readLine(); // ignorar primera línea
@@ -123,13 +122,8 @@ public class CargaPeliculas {
             }
         } catch (IOException e) {
             System.out.println("Error al leer el archivo: " + e.getMessage());
-            return;
         }
 
-        long fin = System.currentTimeMillis();
-        System.out.println("Peliculas cargadas: " + cargadas);
-        System.out.println("Peliculas ignoradas: " + ignoradas);
-        System.out.println("Tiempo de carga de peliculas: " + (fin - inicio) + " ms");
     }
 
     public void buscarPeliculaPorId(String idBuscado) {

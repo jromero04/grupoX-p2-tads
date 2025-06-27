@@ -10,7 +10,7 @@ import um.edu.uy.tads.hash.Exceptions.InvalidHashKey;
 
 import java.util.Scanner;
 
-public class NuevoMain {
+public class MenuPrincipal {
     public static void main(String[] args) throws InvalidHashKey {
         UMovieService servicio = new UMovieService();
         CargaPeliculas carga = new CargaPeliculas();
@@ -76,11 +76,7 @@ public class NuevoMain {
 
             switch (opcionConsulta) {
                 case "1":
-                    long inicio = System.currentTimeMillis();
                     consulta1.topPeliculasPorIdioma();
-                    long fin = System.currentTimeMillis();
-                    long tiempo = fin - inicio;
-                    System.out.println("Tiempo de ejecucion de la consulta: " + tiempo + " ms");
                     break;
                 case "2":
 

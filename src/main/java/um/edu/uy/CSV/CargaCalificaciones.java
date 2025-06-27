@@ -21,10 +21,7 @@ public class CargaCalificaciones {
         int cargadas = 0;
         int ignoradas = 0;
         int otrasExcepciones = 0;
-        int parseoFallido = 0;
-        int noEncontradas = 0;
 
-        long inicio = System.currentTimeMillis();
 
         try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
             String cabecera = br.readLine(); // ignorar la cabecera
@@ -34,7 +31,6 @@ public class CargaCalificaciones {
                 String[] partes = linea.split(",");
 
                 if (partes.length < 4) {
-                    ignoradas++;
                     continue;
                 }
 
@@ -50,8 +46,6 @@ public class CargaCalificaciones {
                     try {
                         pelicula = servicio.getPeliculas().search(idPelicula);
                     } catch (InvalidHashKey e) {
-                        ignoradas++;
-                        noEncontradas++;
                         continue;
                     }
 
@@ -71,8 +65,6 @@ public class CargaCalificaciones {
                         puntaje = Double.parseDouble(ratingStr);
                         segundos = Long.parseLong(timestampStr);
                     } catch (Exception e) {
-                        parseoFallido++;
-                        ignoradas++;
                         continue;
                     }
 
@@ -91,15 +83,7 @@ public class CargaCalificaciones {
             }
         } catch (IOException e) {
             System.out.println("Error al leer el archivo: " + e.getMessage());
-            return;
         }
-
-        long fin = System.currentTimeMillis();
-        System.out.println("Calificaciones cargadas: " + cargadas);
-        System.out.println("Calificaciones ignoradas: " + ignoradas);
-        System.out.println("  - Películas no encontradas: " + noEncontradas);
-        System.out.println("  - Fallos de rating o timestamp: " + parseoFallido);
-        System.out.println("  - Mal formateadas u otras: " + otrasExcepciones);
 
     }
 
